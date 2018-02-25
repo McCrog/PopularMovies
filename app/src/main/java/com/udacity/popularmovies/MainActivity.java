@@ -1,5 +1,6 @@
 package com.udacity.popularmovies;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        MoviesImageAdapter.MoviesImageAdapterOnClickHandler {
 
     // TODO - insert your themoviedb.org API KEY here
     private final static String API_KEY = "";
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movies = response.body().getResults();
-                recyclerView.setAdapter(new MoviesImageAdapter(getApplicationContext(), movies));
+                recyclerView.setAdapter(new MoviesImageAdapter(getApplicationContext(), movies, MainActivity.this));
                 Log.d(TAG, "Number of movies received: " + movies.size());
             }
 
@@ -118,5 +120,13 @@ public class MainActivity extends AppCompatActivity {
     private void defaultSetup() {
         Resources res = getResources();
         sortByPopular = res.getBoolean(R.bool.movie_sort_by_popular);
+    }
+
+    @Override
+    public void onClick(int index) {
+        Movie movie = movies.get(index);
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("movieTag", movie);
+        startActivity(intent);
     }
 }

@@ -1,12 +1,15 @@
 package com.udacity.popularmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by alex on 23/02/2018.
  */
 
-public class Movie {
+public class Movie implements Parcelable {
     @SerializedName("poster_path")
     private String posterPath;
 
@@ -28,6 +31,34 @@ public class Movie {
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
+    }
+
+    public Movie(Parcel in) {
+        readFromParcel(in);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Movie createFromParcel(Parcel in ) {
+            return new Movie(in);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(posterPath);
+        parcel.writeString(originalTitle);
+        parcel.writeString(overview);
+        parcel.writeString(releaseDate);
+        parcel.writeDouble(voteAverage);
     }
 
     public String getPosterPath() {
@@ -68,5 +99,13 @@ public class Movie {
 
     public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
+    }
+
+    private void readFromParcel(Parcel in ) {
+        posterPath = in.readString();
+        originalTitle = in.readString();
+        overview = in.readString();
+        releaseDate = in.readString();
+        voteAverage = in.readDouble();
     }
 }

@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
 import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.utilities.ImageUtil;
 
 import java.util.List;
 
@@ -24,9 +24,19 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
     private final static String[] IMAGE_SIZE = {"w92", "w154", "w185", "w342", "w500", "w780", "original"};
     private final static String RECOMMEND_IMAGE_SIZE = IMAGE_SIZE[2];
 
-    public MoviesImageAdapter(Context context, List<Movie> movies) {
+    final private MoviesImageAdapterOnClickHandler mClickHandler;
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface MoviesImageAdapterOnClickHandler {
+        void onClick(int index);
+    }
+
+    public MoviesImageAdapter(Context context, List<Movie> movies, MoviesImageAdapterOnClickHandler clickHandler) {
         this.context = context;
         this.movies = movies;
+        this.mClickHandler = clickHandler;
     }
 
     @Override
@@ -39,10 +49,7 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
 
-        Picasso.with(context)
-                .load(BASE_IMAGE_URL + RECOMMEND_IMAGE_SIZE + movie.getPosterPath())
-                .placeholder(R.color.colorAccent)
-                .into(holder.poster);
+        ImageUtil.loadImage(context, movie.getPosterPath(), holder.poster, 2);
     }
 
     @Override
@@ -51,12 +58,20 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
     }
 
 
-    class MovieViewHolder extends RecyclerView.ViewHolder {
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView poster;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             poster = (ImageView) itemView.findViewById(R.id.poster_iv);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            mClickHandler.onClick(adapterPosition);
         }
     }
 
