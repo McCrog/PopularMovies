@@ -8,23 +8,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udacity.popularmovies.model.Movie;
-import com.udacity.popularmovies.utilities.ImageUtil;
+import com.udacity.popularmovies.utilities.ImageUtils;
 
 /**
  * Created by alex on 25/02/2018.
  */
 
 public class DetailActivity extends AppCompatActivity {
-    private final static String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
-    private final static String[] IMAGE_SIZE = {"w92", "w154", "w185", "w342", "w500", "w780", "original"};
-    private final static String RECOMMEND_IMAGE_SIZE = IMAGE_SIZE[1];
+    public static final String MOVIE_DETAILS = "MOVIE_DETAILS";
 
     private Movie movie;
-
-    private TextView mOriginalTitle;
-    private TextView mOverview;
-    private TextView mReleaseDate;
-    private TextView mVoteAverage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +29,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            movie = intent.getExtras().getParcelable("movieTag");
+            movie = intent.getExtras().getParcelable(MOVIE_DETAILS);
         } else {
             closeOnError();
         }
@@ -49,14 +42,14 @@ public class DetailActivity extends AppCompatActivity {
 
         populateUI(movie);
 
-        ImageUtil.loadImage(this, movie.getPosterPath(), posterIv, 1);
+        ImageUtils.loadImage(this, movie.getPosterPath(), posterIv, 1);
     }
 
     private void populateUI(Movie movie) {
-        mOriginalTitle = findViewById(R.id.original_title_tv);
-        mOverview = findViewById(R.id.overview_tv);
-        mReleaseDate = findViewById(R.id.release_date_tv);
-        mVoteAverage = findViewById(R.id.vote_average_tv);
+        TextView mOriginalTitle = findViewById(R.id.original_title_tv);
+        TextView mOverview = findViewById(R.id.overview_tv);
+        TextView mReleaseDate = findViewById(R.id.release_date_tv);
+        TextView mVoteAverage = findViewById(R.id.vote_average_tv);
 
         mOriginalTitle.setText(movie.getOriginalTitle());
         mOverview.setText(movie.getOverview());

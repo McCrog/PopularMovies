@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.udacity.popularmovies.model.Movie;
-import com.udacity.popularmovies.utilities.ImageUtil;
+import com.udacity.popularmovies.utilities.ImageUtils;
 
 import java.util.List;
 
@@ -20,11 +20,8 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
 
     private List<Movie> movies;
     private Context context;
-    private final static String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
-    private final static String[] IMAGE_SIZE = {"w92", "w154", "w185", "w342", "w500", "w780", "original"};
-    private final static String RECOMMEND_IMAGE_SIZE = IMAGE_SIZE[2];
 
-    final private MoviesImageAdapterOnClickHandler mClickHandler;
+    private final MoviesImageAdapterOnClickHandler mClickHandler;
 
     /**
      * The interface that receives onClick messages.
@@ -49,7 +46,7 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
 
-        ImageUtil.loadImage(context, movie.getPosterPath(), holder.poster, 2);
+        ImageUtils.loadImage(context, movie.getPosterPath(), holder.poster, 2);
     }
 
     @Override
@@ -63,7 +60,7 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            poster = (ImageView) itemView.findViewById(R.id.poster_iv);
+            poster = itemView.findViewById(R.id.poster_iv);
 
             itemView.setOnClickListener(this);
         }
