@@ -28,6 +28,7 @@ import com.udacity.popularmovies.utilities.ImageUtils;
 
 /**
  * Created by McCrog on 25/02/2018.
+ *
  */
 
 public class DetailActivity extends AppCompatActivity {

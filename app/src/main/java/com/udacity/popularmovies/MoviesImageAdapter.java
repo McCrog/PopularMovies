@@ -30,12 +30,13 @@ import java.util.List;
 
 /**
  * Created by McCrog on 24/02/2018.
+ *
  */
 
 public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.MovieViewHolder> {
 
-    private List<Movie> movies;
-    private Context context;
+    private final List<Movie> movies;
+    private final Context context;
 
     private final MoviesImageAdapterOnClickHandler mClickHandler;
 
@@ -72,7 +73,7 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
 
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView poster;
+        final ImageView poster;
 
         public MovieViewHolder(View itemView) {
             super(itemView);

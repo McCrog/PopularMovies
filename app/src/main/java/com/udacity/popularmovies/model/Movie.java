@@ -23,6 +23,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by McCrog on 23/02/2018.
+ *
  */
 
 public class Movie implements Parcelable {
@@ -49,7 +50,7 @@ public class Movie implements Parcelable {
         this.voteAverage = voteAverage;
     }
 
-    public Movie(Parcel in) {
+    private Movie(Parcel in) {
         readFromParcel(in);
     }
 

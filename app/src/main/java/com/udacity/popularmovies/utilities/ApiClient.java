@@ -21,10 +21,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by alex on 24/02/2018.
+ *
  */
 
 public class ApiClient {
-    public static final String BASE_URL = "http://api.themoviedb.org/3/";
+    private static final String BASE_URL = "http://api.themoviedb.org/3/";
     private static Retrofit retrofit = null;
 
 

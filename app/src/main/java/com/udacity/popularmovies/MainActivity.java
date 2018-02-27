@@ -19,6 +19,7 @@ package com.udacity.popularmovies;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +43,7 @@ import retrofit2.Response;
 
 /**
  * Created by McCrog on 23/02/2018.
+ *
  */
 
 public class MainActivity extends AppCompatActivity implements
@@ -123,14 +125,14 @@ public class MainActivity extends AppCompatActivity implements
 
         popularMovies.enqueue(new Callback<MoviesResponse>() {
             @Override
-            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+            public void onResponse(@NonNull Call<MoviesResponse> call, @NonNull Response<MoviesResponse> response) {
                 movies = response.body().getResults();
                 recyclerView.setAdapter(new MoviesImageAdapter(getApplicationContext(), movies, MainActivity.this));
                 Log.d(TAG, "Number of movies received: " + movies.size());
             }
 
             @Override
-            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MoviesResponse> call, @NonNull Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
                 Toast.makeText(MainActivity.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();

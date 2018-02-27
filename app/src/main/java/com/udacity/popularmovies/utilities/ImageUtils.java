@@ -24,6 +24,7 @@ import com.udacity.popularmovies.R;
 
 /**
  * Created by McCrog on 25/02/2018.
+ *
  */
 
 public class ImageUtils {

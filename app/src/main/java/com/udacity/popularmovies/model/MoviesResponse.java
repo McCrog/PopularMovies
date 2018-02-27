@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * Created by McCrog on 24/02/2018.
+ *
  */
 
 public class MoviesResponse {

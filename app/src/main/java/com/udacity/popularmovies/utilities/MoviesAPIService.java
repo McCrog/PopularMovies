@@ -24,6 +24,7 @@ import retrofit2.http.Query;
 
 /**
  * Created by alex on 23/02/2018.
+ *
  */
 
 public interface MoviesAPIService {
