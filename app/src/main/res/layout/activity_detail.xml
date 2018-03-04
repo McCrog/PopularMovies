@@ -36,8 +36,8 @@
             android:id="@+id/poster_small_iv"
             android:layout_width="@dimen/detail_poster_w154_width"
             android:layout_height="@dimen/detail_poster_w154_height"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
             android:contentDescription="@string/poster"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/original_title_tv"
@@ -46,8 +46,8 @@
         <TextView
             android:id="@+id/release_date_tv"
             style="@style/ReleaseDateLabel"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_extra_large"
+            android:layout_marginTop="@dimen/margin_small"
             app:layout_constraintStart_toEndOf="@+id/poster_small_iv"
             app:layout_constraintTop_toBottomOf="@+id/original_title_tv"
             tools:text="2015" />
@@ -56,7 +56,7 @@
             android:id="@+id/vote_average_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/margin_small"
             app:layout_constraintStart_toStartOf="@+id/release_date_tv"
             app:layout_constraintTop_toBottomOf="@+id/release_date_tv"
             tools:text="7.5/10" />
@@ -65,9 +65,9 @@
             android:id="@+id/overview_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/poster_small_iv"
             tools:text="Set in a post-apocalyptic world" />

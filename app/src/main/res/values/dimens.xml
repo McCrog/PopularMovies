@@ -18,4 +18,8 @@
 <resources>
     <dimen name="detail_poster_w154_width">154px</dimen>
     <dimen name="detail_poster_w154_height">231px</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_extra_large">40dp</dimen>
 </resources>
