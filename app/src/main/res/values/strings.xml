@@ -24,4 +24,6 @@
     <string name="detail_error_message">Movie data not available</string>
     <string name="vote_average">%1$.1f/10</string>
     <string name="poster">Movie Poster</string>
+    <string name="api_error">Please obtain your API KEY first from themoviedb.org</string>
+    <string name="network_error">An error occurred during networking</string>
 </resources>

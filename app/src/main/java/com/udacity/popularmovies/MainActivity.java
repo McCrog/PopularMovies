@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements
 
         if (API_KEY.isEmpty()) {
             Toast.makeText(getApplicationContext(),
-                    "Please obtain your API KEY first from themoviedb.org",
+                    getString(R.string.api_error),
                     Toast.LENGTH_LONG).show();
             return;
         }
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onFailure(@NonNull Call<MoviesResponse> call, @NonNull Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
-                Toast.makeText(MainActivity.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         });
     }
