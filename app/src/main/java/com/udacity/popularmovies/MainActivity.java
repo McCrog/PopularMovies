@@ -38,6 +38,9 @@ import com.udacity.popularmovies.utilities.MoviesAPIService;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,7 +57,13 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private RecyclerView recyclerView;
+    @BindView(R.id.movies_recycle_view)
+    RecyclerView recyclerView;
+    @BindString(R.string.api_error)
+    String apiError;
+    @BindString(R.string.network_error)
+    String networkError;
+
     private static List<Movie> movies;
 
     private SharedPreferences sharedPreferences;
@@ -67,18 +76,17 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
+
         sharedPreferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
 
         if (API_KEY.isEmpty()) {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.api_error),
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), apiError, Toast.LENGTH_LONG).show();
             return;
         }
 
         movies = new ArrayList<>();
-
-        recyclerView = findViewById(R.id.movies_recycle_view);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
@@ -137,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onFailure(@NonNull Call<MoviesResponse> call, @NonNull Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
-                Toast.makeText(MainActivity.this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, networkError, Toast.LENGTH_SHORT).show();
             }
         });
     }

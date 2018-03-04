@@ -28,6 +28,9 @@ import com.udacity.popularmovies.utilities.ImageUtils;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by McCrog on 24/02/2018.
  *
@@ -37,7 +40,6 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
 
     private final List<Movie> movies;
     private final Context context;
-
     private final MoviesImageAdapterOnClickHandler mClickHandler;
 
     /**
@@ -73,11 +75,12 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
 
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final ImageView poster;
+        @BindView(R.id.poster_iv)
+        ImageView poster;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            poster = itemView.findViewById(R.id.poster_iv);
+            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(this);
         }

@@ -26,6 +26,10 @@ import android.widget.Toast;
 import com.udacity.popularmovies.model.Movie;
 import com.udacity.popularmovies.utilities.ImageUtils;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by McCrog on 25/02/2018.
  *
@@ -36,12 +40,25 @@ public class DetailActivity extends AppCompatActivity {
 
     private Movie movie;
 
+    @BindView(R.id.poster_small_iv)
+    ImageView posterIv;
+    @BindView(R.id.original_title_tv)
+    TextView mOriginalTitle;
+    @BindView(R.id.overview_tv)
+    TextView mOverview;
+    @BindView(R.id.release_date_tv)
+    TextView mReleaseDate;
+    @BindView(R.id.vote_average_tv)
+    TextView mVoteAverage;
+    @BindString(R.string.detail_error_message)
+    String detailErrorMessage;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ImageView posterIv = findViewById(R.id.poster_small_iv);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
 
@@ -63,11 +80,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI(Movie movie) {
-        TextView mOriginalTitle = findViewById(R.id.original_title_tv);
-        TextView mOverview = findViewById(R.id.overview_tv);
-        TextView mReleaseDate = findViewById(R.id.release_date_tv);
-        TextView mVoteAverage = findViewById(R.id.vote_average_tv);
-
         mOriginalTitle.setText(movie.getOriginalTitle());
         mOverview.setText(movie.getOverview());
         String year = getReleaseYear(movie.getReleaseDate());
@@ -77,7 +89,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void closeOnError() {
         finish();
-        Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, detailErrorMessage, Toast.LENGTH_SHORT).show();
     }
 
     private String getReleaseYear(String releaseDate) {
