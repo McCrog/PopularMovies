@@ -19,6 +19,7 @@ package com.udacity.popularmovies;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements
     @BindString(R.string.network_error)
     String networkError;
 
-    private static List<Movie> movies;
+    private static List<Movie> movies = new ArrayList<>();
 
     private SharedPreferences sharedPreferences;
     private static final String APP_PREFERENCES = "APP_PREFERENCES";
@@ -86,11 +87,22 @@ public class MainActivity extends AppCompatActivity implements
             return;
         }
 
-        movies = new ArrayList<>();
-
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
-        getData(getSortPreference());
+        if(savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
+            getData(getSortPreference());
+        }
+        else {
+            movies = savedInstanceState.getParcelableArrayList("movies");
+        }
+
+        recyclerView.setAdapter(getAdapter());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("movies", (ArrayList<? extends Parcelable>) movies);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -137,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onResponse(@NonNull Call<MoviesResponse> call, @NonNull Response<MoviesResponse> response) {
                 movies = response.body().getResults();
-                recyclerView.setAdapter(new MoviesImageAdapter(getApplicationContext(), movies, MainActivity.this));
+                recyclerView.setAdapter(getAdapter());
                 Log.d(TAG, "Number of movies received: " + movies.size());
             }
 
@@ -191,5 +203,9 @@ public class MainActivity extends AppCompatActivity implements
         int nColumns = width / widthDivider;
         if (nColumns < 2) return 2;
         return nColumns;
+    }
+
+    private MoviesImageAdapter getAdapter() {
+        return new MoviesImageAdapter(getApplicationContext(), movies, MainActivity.this);
     }
 }
