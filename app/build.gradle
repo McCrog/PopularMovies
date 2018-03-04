@@ -16,6 +16,9 @@
 
 apply plugin: 'com.android.application'
 
+def movieApi = new Properties()
+movieApi.load(new FileInputStream(rootProject.file("../movie_api.properties")))
+
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -25,6 +28,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField('String', 'API_KEY', '"' + movieApi['apiKey'] + '"')
     }
     buildTypes {
         release {

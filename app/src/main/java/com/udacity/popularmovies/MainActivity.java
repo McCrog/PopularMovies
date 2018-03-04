@@ -42,6 +42,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.udacity.popularmovies.BuildConfig.API_KEY;
+
 /**
  * Created by McCrog on 23/02/2018.
  *
@@ -50,8 +52,6 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements
         MoviesImageAdapter.MoviesImageAdapterOnClickHandler {
 
-    // TODO - insert your themoviedb.org API KEY here
-    private static final String API_KEY = "";
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView recyclerView;
