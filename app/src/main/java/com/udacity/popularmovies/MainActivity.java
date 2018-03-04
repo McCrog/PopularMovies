@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -78,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements
         movies = new ArrayList<>();
 
         recyclerView = findViewById(R.id.movies_recycle_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
         getData(getSortPreference());
     }
@@ -170,5 +172,16 @@ public class MainActivity extends AppCompatActivity implements
         editor.putInt(APP_SORT_PREFERENCE, sortPreference);
         editor.apply();
         getData(sortPreference);
+    }
+
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
     }
 }
