@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import com.udacity.popularmovies.model.Movie;
 import com.udacity.popularmovies.utilities.ImageUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,7 +39,7 @@ import butterknife.ButterKnife;
 
 public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.MovieViewHolder> {
 
-    private final List<Movie> movies;
+    private final List<Movie> movies = new ArrayList<>();
     private final Context context;
     private final MoviesImageAdapterOnClickHandler mClickHandler;
 
@@ -49,9 +50,8 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
         void onClick(int index);
     }
 
-    public MoviesImageAdapter(Context context, List<Movie> movies, MoviesImageAdapterOnClickHandler clickHandler) {
+    public MoviesImageAdapter(Context context, MoviesImageAdapterOnClickHandler clickHandler) {
         this.context = context;
-        this.movies = movies;
         this.mClickHandler = clickHandler;
     }
 
@@ -71,6 +71,12 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
     @Override
     public int getItemCount() {
         return (movies == null) ? 0 : movies.size();
+    }
+
+    public void setData(List<Movie> newMovies) {
+        movies.clear();
+        movies.addAll(newMovies);
+        notifyDataSetChanged();
     }
 
 

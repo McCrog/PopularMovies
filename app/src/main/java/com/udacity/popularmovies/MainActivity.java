@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements
     String networkError;
 
     private static List<Movie> movies = new ArrayList<>();
+    private MoviesImageAdapter moviesImageAdapter;
 
     private SharedPreferences sharedPreferences;
     private static final String APP_PREFERENCES = "APP_PREFERENCES";
@@ -89,14 +90,16 @@ public class MainActivity extends AppCompatActivity implements
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
+        moviesImageAdapter = new MoviesImageAdapter(getApplicationContext(), MainActivity.this);
+        recyclerView.setAdapter(moviesImageAdapter);
+
         if(savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
             getData(getSortPreference());
         }
         else {
             movies = savedInstanceState.getParcelableArrayList("movies");
+            moviesImageAdapter.setData(movies);
         }
-
-        recyclerView.setAdapter(getAdapter());
     }
 
     @Override
@@ -149,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onResponse(@NonNull Call<MoviesResponse> call, @NonNull Response<MoviesResponse> response) {
                 movies = response.body().getResults();
-                recyclerView.setAdapter(getAdapter());
+                moviesImageAdapter.setData(movies);
                 Log.d(TAG, "Number of movies received: " + movies.size());
             }
 
@@ -203,9 +206,5 @@ public class MainActivity extends AppCompatActivity implements
         int nColumns = width / widthDivider;
         if (nColumns < 2) return 2;
         return nColumns;
-    }
-
-    private MoviesImageAdapter getAdapter() {
-        return new MoviesImageAdapter(getApplicationContext(), movies, MainActivity.this);
     }
 }
