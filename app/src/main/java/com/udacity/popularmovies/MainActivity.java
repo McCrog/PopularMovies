@@ -93,10 +93,9 @@ public class MainActivity extends AppCompatActivity implements
         moviesImageAdapter = new MoviesImageAdapter(getApplicationContext(), MainActivity.this);
         recyclerView.setAdapter(moviesImageAdapter);
 
-        if(savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
+        if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
             getData(getSortPreference());
-        }
-        else {
+        } else {
             movies = savedInstanceState.getParcelableArrayList("movies");
             moviesImageAdapter.setData(movies);
         }
