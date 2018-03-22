@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.mvp;
-
-import android.util.Log;
+package com.udacity.popularmovies.movie;
 
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.base.MovieContract;
+import com.udacity.popularmovies.base.BasePresenterImpl;
+import com.udacity.popularmovies.domain.LoadCallback;
+import com.udacity.popularmovies.domain.MovieNetworkModel;
+import com.udacity.popularmovies.utilities.SortPreferences;
 
 import java.util.List;
 
@@ -28,7 +30,7 @@ import java.util.List;
  *
  */
 
-public class MoviePresenter extends PresenterBase<MovieContract.View> implements MovieContract.Presenter {
+public class MoviePresenter extends BasePresenterImpl<MovieContract.View> implements MovieContract.Presenter {
     private static final String TAG = MoviePresenter.class.getSimpleName();
 
     private final MovieNetworkModel model;
@@ -45,19 +47,26 @@ public class MoviePresenter extends PresenterBase<MovieContract.View> implements
     }
 
     public void loadMovies() {
-        model.getMovies(onLoadSortPreference(), new MovieNetworkModel.LoadCallback() {
+        model.getMovies(onLoadSortPreference(), new LoadCallback() {
             @Override
             public void onComplete(List<Movie> movies) {
                 getView().showToast(R.string.network_complete);
-                Log.d(TAG, "Befor getView().showMovies(movies)");
                 getView().showMovies(movies);
             }
 
             @Override
             public void onError() {
-                getView().showToast(R.string.network_error);
+                if (getView() != null) {
+                    getView().showToast(R.string.network_error);
+                }
             }
         });
+    }
+
+    @Override
+    public void detachView() {
+        model.canselCallback();
+        super.detachView();
     }
 
     public Movie onPosterClick(int index) {

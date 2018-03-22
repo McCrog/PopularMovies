@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.mvp;
+package com.udacity.popularmovies.domain;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.udacity.popularmovies.model.Movie;
-import com.udacity.popularmovies.model.MoviesResponse;
-import com.udacity.popularmovies.utilities.ApiClient;
-import com.udacity.popularmovies.utilities.MoviesAPIService;
+import com.udacity.popularmovies.movie.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.udacity.popularmovies.BuildConfig.API_KEY;
-import static com.udacity.popularmovies.common.Constants.APP_PREFERENCE_POPULAR;
+import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCE_POPULAR;
 
 /**
  * Created by McCrog on 23/02/2018.
@@ -43,11 +40,11 @@ public class MovieNetworkModel {
     private static final String TAG = MovieNetworkModel.class.getSimpleName();
 
     private List<Movie> movies = new ArrayList<>();
+    private Call<MoviesResponse> popularMovies;
 
     public void getMovies(int sortPreference, final LoadCallback callback) {
         MoviesAPIService moviesApiService = ApiClient.getClient().create(MoviesAPIService.class);
 
-        Call<MoviesResponse> popularMovies;
         if (sortPreference == APP_PREFERENCE_POPULAR) {
             popularMovies = moviesApiService.getPopularMovies(API_KEY);
         } else {
@@ -78,13 +75,13 @@ public class MovieNetworkModel {
         return null;
     }
 
-    public List<Movie> getList() {
-        return movies;
+    public void canselCallback() {
+        if (popularMovies != null) {
+            popularMovies.cancel();
+        }
     }
 
-    interface LoadCallback {
-        void onComplete(List<Movie> movies);
-
-        void onError();
+    public List<Movie> getList() {
+        return movies;
     }
 }

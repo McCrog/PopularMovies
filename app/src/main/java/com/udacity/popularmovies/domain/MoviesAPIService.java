@@ -14,26 +14,21 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.model;
+package com.udacity.popularmovies.domain;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
- * Created by McCrog on 24/02/2018.
+ * Created by alex on 23/02/2018.
  *
  */
 
-public class MoviesResponse {
-    @SerializedName("results")
-    private List<Movie> results;
+public interface MoviesAPIService {
+    @GET("movie/popular")
+    Call<MoviesResponse> getPopularMovies(@Query("api_key") String apiKey);
 
-    public List<Movie> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Movie> results) {
-        this.results = results;
-    }
+    @GET("movie/top_rated")
+    Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String apiKey);
 }

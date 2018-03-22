@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.common;
+package com.udacity.popularmovies.utilities;
 
 /**
  * Created by McCrog on 07/03/2018.

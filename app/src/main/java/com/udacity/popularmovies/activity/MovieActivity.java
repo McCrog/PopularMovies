@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.mvp;
+package com.udacity.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,16 +23,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.udacity.popularmovies.DetailActivity;
-import com.udacity.popularmovies.MoviesImageAdapter;
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.movie.Movie;
+import com.udacity.popularmovies.base.MovieContract;
+import com.udacity.popularmovies.domain.MovieNetworkModel;
+import com.udacity.popularmovies.movie.MoviePresenter;
+import com.udacity.popularmovies.utilities.SortPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.udacity.popularmovies.common.Constants.APP_PREFERENCE_POPULAR;
-import static com.udacity.popularmovies.common.Constants.APP_PREFERENCE_TOP_RATED;
+import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCE_POPULAR;
+import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCE_TOP_RATED;
 
 /**
  * Created by McCrog on 23/02/2018.
@@ -78,20 +79,29 @@ public class MovieActivity extends AppCompatActivity implements
         MovieNetworkModel movieNetworkModel = new MovieNetworkModel();
         presenter = new MoviePresenter(movieNetworkModel, sortPreferences);
         presenter.attachView(this);
-        Log.d(TAG, "Befor viewIsReady()");
-//        presenter.viewIsReady();
 
-        if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
-            presenter.viewIsReady();
-        } else {
-            moviesImageAdapter.setData(savedInstanceState.<Movie>getParcelableArrayList("movies"));
-        }
+        presenter.viewIsReady();
+
+//        if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
+//            Log.d(TAG, "Befor viewIsReady() in if");
+//            presenter.viewIsReady();
+//        } else {
+//            Log.d(TAG, "else");
+//            List<Movie> newMovies = savedInstanceState.<Movie>getParcelableArrayList("movies");
+//            moviesImageAdapter.setData(savedInstanceState.<Movie>getParcelableArrayList("movies"));
+//        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("movies", (ArrayList<? extends Parcelable>) presenter.onMoviesSaved());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        moviesImageAdapter.setData(savedInstanceState.<Movie>getParcelableArrayList("movies"));
     }
 
     @Override
@@ -144,9 +154,6 @@ public class MovieActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         presenter.detachView();
-        if (isFinishing()) {
-            presenter.destroy();
-        }
     }
 
     private void setSortMenuItem(Menu menu) {

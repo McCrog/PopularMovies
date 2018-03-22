@@ -14,23 +14,28 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.utilities;
+package com.udacity.popularmovies.domain;
 
-import com.udacity.popularmovies.model.MoviesResponse;
-
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by alex on 23/02/2018.
+ * Created by alex on 24/02/2018.
  *
  */
 
-public interface MoviesAPIService {
-    @GET("movie/popular")
-    Call<MoviesResponse> getPopularMovies(@Query("api_key") String apiKey);
+public class ApiClient {
+    private static final String BASE_URL = "http://api.themoviedb.org/3/";
+    private static Retrofit retrofit = null;
 
-    @GET("movie/top_rated")
-    Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String apiKey);
+
+    public static Retrofit getClient() {
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofit;
+    }
 }

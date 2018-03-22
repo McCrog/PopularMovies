@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.mvp;
+package com.udacity.popularmovies.domain;
+
+import com.udacity.popularmovies.movie.Movie;
+
+import java.util.List;
 
 /**
- * Created by alex on 07/03/2018.
+ * Created by alex on 22/03/2018.
  */
 
-public interface MvpPresenter<V extends MvpView> {
+public interface LoadCallback {
+    void onComplete(List<Movie> movies);
 
-    void attachView(V mvpView);
-
-    void viewIsReady();
-
-    void detachView();
-
-    void destroy();
+    void onError();
 }

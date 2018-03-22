@@ -14,26 +14,11 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.mvp;
-
-import com.udacity.popularmovies.model.Movie;
-
-import java.util.List;
+package com.udacity.popularmovies.base;
 
 /**
- * Created by McCrog on 07/03/2018.
- *
+ * Created by alex on 07/03/2018.
  */
 
-public interface MovieContract {
-    interface View extends MvpView {
-        void showMovies(List<Movie> movies);
-        void showToast(int resId);
-    }
-
-    interface Presenter extends MvpPresenter<View> {
-        Movie onPosterClick(int index);
-        void onChangeSortPreference(int preferense);
-        int onLoadSortPreference();
-    }
+public interface BaseView {
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.model;
+package com.udacity.popularmovies.movie;
 
 import android.os.Parcel;
 import android.os.Parcelable;

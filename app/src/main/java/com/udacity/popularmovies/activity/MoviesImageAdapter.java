@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies;
+package com.udacity.popularmovies.activity;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.R;
+import com.udacity.popularmovies.movie.Movie;
 import com.udacity.popularmovies.utilities.ImageUtils;
 
 import java.util.ArrayList;

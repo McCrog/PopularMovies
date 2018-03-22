@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies;
+package com.udacity.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.R;
+import com.udacity.popularmovies.movie.Movie;
 import com.udacity.popularmovies.utilities.ImageUtils;
 
 import butterknife.BindString;

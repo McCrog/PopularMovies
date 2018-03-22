@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.mvp;
+package com.udacity.popularmovies.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.udacity.popularmovies.common.Constants.APP_PREFERENCES;
-import static com.udacity.popularmovies.common.Constants.APP_SORT_PREFERENCE;
+import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCES;
+import static com.udacity.popularmovies.utilities.Constants.APP_SORT_PREFERENCE;
 
 /**
  * Created by McCrog on 07/03/2018.

@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.mvp;
+package com.udacity.popularmovies.base;
 
 /**
  * Created by alex on 07/03/2018.
  */
 
-public interface MvpView {
+public interface BasePresenter<V extends BaseView> {
+
+    void attachView(V mvpView);
+
+    void viewIsReady();
+
+    void detachView();
 }

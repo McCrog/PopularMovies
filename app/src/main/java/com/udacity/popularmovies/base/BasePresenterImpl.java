@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.mvp;
+package com.udacity.popularmovies.base;
 
 /**
  * Created by McCrog on 07/03/2018.
  *
  */
 
-public abstract class PresenterBase<T extends MvpView> implements MvpPresenter<T> {
+public abstract class BasePresenterImpl<T extends BaseView> implements BasePresenter<T> {
 
     private T view;
 
@@ -41,10 +41,5 @@ public abstract class PresenterBase<T extends MvpView> implements MvpPresenter<T
 
     protected boolean isViewAttached() {
         return view != null;
-    }
-
-    @Override
-    public void destroy() {
-
     }
 }
