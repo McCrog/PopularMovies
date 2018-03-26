@@ -19,7 +19,9 @@ package com.udacity.popularmovies.domain;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.udacity.popularmovies.movie.Movie;
+import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.model.Review;
+import com.udacity.popularmovies.model.Trailer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ public class MovieNetworkModel {
     private List<Movie> movies = new ArrayList<>();
     private Call<MoviesResponse> popularMovies;
 
-    public void getMovies(int sortPreference, final LoadCallback callback) {
+    public void callMovies(int sortPreference, final LoadCallback callback) {
         MoviesAPIService moviesApiService = ApiClient.getClient().create(MoviesAPIService.class);
 
         if (sortPreference == APP_PREFERENCE_POPULAR) {
@@ -83,5 +85,60 @@ public class MovieNetworkModel {
 
     public List<Movie> getList() {
         return movies;
+    }
+
+
+    private List<Trailer> trailers = new ArrayList<>();
+    public void callTrailers(String id, final LoadCallback callback) {
+        MoviesAPIService moviesApiService = ApiClient.getClient().create(MoviesAPIService.class);
+
+        Call<TrailerResponse> trailersCall = moviesApiService.getMovieTrailers(id, API_KEY);
+
+        trailersCall.enqueue(new Callback<TrailerResponse>() {
+
+            @Override
+            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+                trailers = response.body().getResults();
+                callback.onComplete(trailers);
+                Log.d(TAG, "Number of trailers received: " + trailers.size());
+            }
+
+            @Override
+            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+                Log.e(TAG, t.toString());
+                callback.onError();
+            }
+        });
+    }
+
+    private List<Review> reviews = new ArrayList<>();
+    public void callReviews(String id, final LoadCallback callback) {
+        MoviesAPIService moviesApiService = ApiClient.getClient().create(MoviesAPIService.class);
+
+        Call<ReviewResponse> reviewCall = moviesApiService.getMovieReviews(id, API_KEY);
+
+        reviewCall.enqueue(new Callback<ReviewResponse>() {
+
+            @Override
+            public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
+                reviews = response.body().getResults();
+                callback.onComplete(reviews);
+                Log.d(TAG, "Number of reviews received: " + reviews.size());
+            }
+
+            @Override
+            public void onFailure(Call<ReviewResponse> call, Throwable t) {
+                Log.e(TAG, t.toString());
+                callback.onError();
+            }
+        });
+    }
+
+    public List<Trailer> getTrailers() {
+        return trailers;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
     }
 }

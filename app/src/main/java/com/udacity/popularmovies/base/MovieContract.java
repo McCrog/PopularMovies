@@ -16,7 +16,7 @@
 
 package com.udacity.popularmovies.base;
 
-import com.udacity.popularmovies.movie.Movie;
+import com.udacity.popularmovies.model.Movie;
 
 import java.util.List;
 

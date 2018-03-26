@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.movie;
+package com.udacity.popularmovies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by McCrog on 23/02/2018.
@@ -27,6 +30,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Movie implements Parcelable {
+    @SerializedName("id")
+    private Integer id;
+
     @SerializedName("poster_path")
     private String posterPath;
 
@@ -42,12 +48,20 @@ public class Movie implements Parcelable {
     @SerializedName("vote_average")
     private Double voteAverage;
 
-    public Movie(String posterPath, String originalTitle, String overview, String releaseDate, Double voteAverage) {
+    private boolean favorite;
+
+    private List<Trailer> trailers = new ArrayList<>();
+
+    private List<Review> reviews = new ArrayList<>();
+
+    public Movie(Integer id, String posterPath, String originalTitle, String overview, String releaseDate, Double voteAverage, boolean favorite) {
+        this.id = id;
         this.posterPath = posterPath;
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
+        this.favorite = favorite;
     }
 
     private Movie(Parcel in) {
@@ -71,11 +85,21 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
         parcel.writeString(posterPath);
         parcel.writeString(originalTitle);
         parcel.writeString(overview);
         parcel.writeString(releaseDate);
         parcel.writeDouble(voteAverage);
+        parcel.writeByte((byte) (favorite ? 1 : 0));
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getPosterPath() {
@@ -118,11 +142,37 @@ public class Movie implements Parcelable {
         this.voteAverage = voteAverage;
     }
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    public List<Trailer> getTrailers() {
+        return trailers;
+    }
+
+    public void setTrailers(List<Trailer> trailers) {
+        this.trailers = trailers;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
     private void readFromParcel(Parcel in ) {
+        id = in.readInt();
         posterPath = in.readString();
         originalTitle = in.readString();
         overview = in.readString();
         releaseDate = in.readString();
         voteAverage = in.readDouble();
+        favorite = in.readByte() != 0;
     }
 }

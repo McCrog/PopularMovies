@@ -16,16 +16,15 @@
 
 package com.udacity.popularmovies.domain;
 
-import com.udacity.popularmovies.movie.Movie;
-
 import java.util.List;
 
 /**
  * Created by alex on 22/03/2018.
+ *
  */
 
 public interface LoadCallback {
-    void onComplete(List<Movie> movies);
+    <T> void onComplete(List<T> movies);
 
     void onError();
 }

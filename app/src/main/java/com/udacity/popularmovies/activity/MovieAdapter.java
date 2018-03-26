@@ -23,8 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.movie.Movie;
+import com.udacity.popularmovies.model.Movie;
 import com.udacity.popularmovies.utilities.ImageUtils;
 
 import java.util.ArrayList;
@@ -38,22 +39,28 @@ import butterknife.ButterKnife;
  *
  */
 
-public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.MovieViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private final List<Movie> movies = new ArrayList<>();
     private final Context context;
-    private final MoviesImageAdapterOnClickHandler mClickHandler;
+    private final MovieOnClickHandler mClickHandler;
+    private final MovieOnFavoriteChangeHandler movieOnFavoriteChangeHandler;
 
     /**
      * The interface that receives onClick messages.
      */
-    public interface MoviesImageAdapterOnClickHandler {
+    public interface MovieOnClickHandler {
         void onClick(int index);
     }
 
-    public MoviesImageAdapter(Context context, MoviesImageAdapterOnClickHandler clickHandler) {
+    public interface MovieOnFavoriteChangeHandler {
+        void onFavoriteClick(int index, boolean favorite);
+    }
+
+    public MovieAdapter(Context context, MovieOnClickHandler clickHandler, MovieOnFavoriteChangeHandler favoriteChangeHandler) {
         this.context = context;
         this.mClickHandler = clickHandler;
+        this.movieOnFavoriteChangeHandler = favoriteChangeHandler;
     }
 
     @Override
@@ -65,6 +72,8 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
+
+        holder.materialFavoriteButton.setFavorite(movie.isFavorite(), false);
 
         ImageUtils.loadImage(context, movie.getPosterPath(), holder.poster, 2);
     }
@@ -81,21 +90,30 @@ public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.
     }
 
 
-    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, MaterialFavoriteButton.OnFavoriteChangeListener {
         @BindView(R.id.poster_iv)
         ImageView poster;
+        @BindView(R.id.main_favorite_button)
+        MaterialFavoriteButton materialFavoriteButton;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(this);
+            materialFavoriteButton.setOnFavoriteChangeListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
             mClickHandler.onClick(adapterPosition);
+        }
+
+        @Override
+        public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
+            int adapterPosition = getAdapterPosition();
+            movieOnFavoriteChangeHandler.onFavoriteClick(adapterPosition, favorite);
         }
     }
 

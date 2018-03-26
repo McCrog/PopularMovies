@@ -18,6 +18,7 @@ package com.udacity.popularmovies.domain;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -31,4 +32,10 @@ public interface MoviesAPIService {
 
     @GET("movie/top_rated")
     Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String apiKey);
+
+    @GET("movie/{id}/videos")
+    Call<TrailerResponse> getMovieTrailers(@Path("id") String id, @Query("api_key") String apiKey);
+
+    @GET("movie/{id}/reviews")
+    Call<ReviewResponse> getMovieReviews(@Path("id") String id, @Query("api_key") String apiKey);
 }

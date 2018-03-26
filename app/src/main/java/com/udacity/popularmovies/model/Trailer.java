@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.domain;
+package com.udacity.popularmovies.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.udacity.popularmovies.model.Movie;
-
-import java.util.List;
 
 /**
- * Created by McCrog on 24/02/2018.
+ * Created by alex on 26/03/2018.
  *
  */
 
-public class MoviesResponse {
-    @SerializedName("results")
-    private List<Movie> results;
+public class Trailer {
+    @SerializedName("key")
+    private String key;
 
-    public List<Movie> getResults() {
-        return results;
+    public String getKey() {
+        return key;
     }
 
-    public void setResults(List<Movie> results) {
-        this.results = results;
+    public void setKey(String key) {
+        this.key = key;
     }
 }

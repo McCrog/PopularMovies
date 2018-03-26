@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.movie;
+package com.udacity.popularmovies.presenter;
 
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.base.MovieContract;
 import com.udacity.popularmovies.base.BasePresenterImpl;
+import com.udacity.popularmovies.base.DetailContract;
 import com.udacity.popularmovies.domain.LoadCallback;
 import com.udacity.popularmovies.domain.MovieNetworkModel;
-import com.udacity.popularmovies.utilities.SortPreferences;
+import com.udacity.popularmovies.model.Review;
+import com.udacity.popularmovies.model.Trailer;
 
 import java.util.List;
 
@@ -30,28 +31,46 @@ import java.util.List;
  *
  */
 
-public class MoviePresenter extends BasePresenterImpl<MovieContract.View> implements MovieContract.Presenter {
-    private static final String TAG = MoviePresenter.class.getSimpleName();
+public class DetailPresenter extends BasePresenterImpl<DetailContract.View> implements DetailContract.Presenter {
+    private static final String TAG = DetailPresenter.class.getSimpleName();
 
     private final MovieNetworkModel model;
-    private final SortPreferences sortPreferences;
+    private final String id;
 
-    public MoviePresenter(MovieNetworkModel model, SortPreferences sortPreferences) {
+    public DetailPresenter(MovieNetworkModel model, String id) {
         this.model = model;
-        this.sortPreferences = sortPreferences;
+        this.id = id;
     }
 
     @Override
     public void viewIsReady() {
-        loadMovies();
+        loadTrailers();
+        loadReviews();
     }
 
-    public void loadMovies() {
-        model.getMovies(onLoadSortPreference(), new LoadCallback() {
+    public void loadTrailers() {
+        model.callReviews(id, new LoadCallback() {
             @Override
-            public void onComplete(List<Movie> movies) {
+            public <T> void onComplete(List<T> trailers) {
                 getView().showToast(R.string.network_complete);
-                getView().showMovies(movies);
+                getView().showTrailers((List<Trailer>) trailers);
+            }
+
+            @Override
+            public void onError() {
+                if (getView() != null) {
+                    getView().showToast(R.string.network_error);
+                }
+            }
+        });
+    }
+
+    public void loadReviews() {
+        model.callReviews(id, new LoadCallback() {
+            @Override
+            public <T> void onComplete(List<T> reviews) {
+                getView().showToast(R.string.network_complete);
+                getView().showReviews((List<Review>) reviews);
             }
 
             @Override
@@ -69,20 +88,8 @@ public class MoviePresenter extends BasePresenterImpl<MovieContract.View> implem
         super.detachView();
     }
 
-    public Movie onPosterClick(int index) {
-        return model.get(index);
-    }
+    @Override
+    public void onTrailerClick(int index) {
 
-    public void onChangeSortPreference(int referense) {
-        sortPreferences.saveSortPreference(referense);
-        loadMovies();
-    }
-
-    public int onLoadSortPreference() {
-        return sortPreferences.getSortPreference();
-    }
-
-    public List<Movie> onMoviesSaved() {
-        return model.getList();
     }
 }

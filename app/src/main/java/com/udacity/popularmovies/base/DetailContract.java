@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.domain;
+package com.udacity.popularmovies.base;
 
-import com.google.gson.annotations.SerializedName;
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.model.Review;
+import com.udacity.popularmovies.model.Trailer;
 
 import java.util.List;
 
 /**
- * Created by McCrog on 24/02/2018.
+ * Created by McCrog on 07/03/2018.
  *
  */
 
-public class MoviesResponse {
-    @SerializedName("results")
-    private List<Movie> results;
-
-    public List<Movie> getResults() {
-        return results;
+public interface DetailContract {
+    interface View extends BaseView {
+        void showTrailers(List<Trailer> trailers);
+        void showReviews(List<Review> reviews);
+        void showToast(int resId);
     }
 
-    public void setResults(List<Movie> results) {
-        this.results = results;
+    interface Presenter extends BasePresenter<View> {
+        void onTrailerClick(int index);
     }
 }

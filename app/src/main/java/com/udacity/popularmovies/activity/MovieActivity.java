@@ -29,10 +29,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.movie.Movie;
 import com.udacity.popularmovies.base.MovieContract;
 import com.udacity.popularmovies.domain.MovieNetworkModel;
-import com.udacity.popularmovies.movie.MoviePresenter;
+import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.presenter.MoviePresenter;
 import com.udacity.popularmovies.utilities.SortPreferences;
 
 import java.util.ArrayList;
@@ -50,14 +50,15 @@ import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCE_TOP_R
  */
 
 public class MovieActivity extends AppCompatActivity implements
-        MoviesImageAdapter.MoviesImageAdapterOnClickHandler, MovieContract.View {
+        MovieAdapter.MovieOnClickHandler, MovieContract.View,
+        MovieAdapter.MovieOnFavoriteChangeHandler {
 
     private static final String TAG = MovieActivity.class.getSimpleName();
 
     @BindView(R.id.movies_recycle_view)
     RecyclerView recyclerView;
 
-    private MoviesImageAdapter moviesImageAdapter;
+    private MovieAdapter movieAdapter;
 
     private SortPreferences sortPreferences;
     private MoviePresenter presenter;
@@ -73,23 +74,14 @@ public class MovieActivity extends AppCompatActivity implements
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
-        moviesImageAdapter = new MoviesImageAdapter(getApplicationContext(), MovieActivity.this);
-        recyclerView.setAdapter(moviesImageAdapter);
+        movieAdapter = new MovieAdapter(getApplicationContext(), MovieActivity.this, MovieActivity.this);
+        recyclerView.setAdapter(movieAdapter);
 
         MovieNetworkModel movieNetworkModel = new MovieNetworkModel();
         presenter = new MoviePresenter(movieNetworkModel, sortPreferences);
         presenter.attachView(this);
 
         presenter.viewIsReady();
-
-//        if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
-//            Log.d(TAG, "Befor viewIsReady() in if");
-//            presenter.viewIsReady();
-//        } else {
-//            Log.d(TAG, "else");
-//            List<Movie> newMovies = savedInstanceState.<Movie>getParcelableArrayList("movies");
-//            moviesImageAdapter.setData(savedInstanceState.<Movie>getParcelableArrayList("movies"));
-//        }
     }
 
     @Override
@@ -101,7 +93,7 @@ public class MovieActivity extends AppCompatActivity implements
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        moviesImageAdapter.setData(savedInstanceState.<Movie>getParcelableArrayList("movies"));
+        movieAdapter.setData(savedInstanceState.<Movie>getParcelableArrayList("movies"));
     }
 
     @Override
@@ -141,7 +133,7 @@ public class MovieActivity extends AppCompatActivity implements
 
     @Override
     public void showMovies(List<Movie> movies) {
-        moviesImageAdapter.setData(movies);
+        movieAdapter.setData(movies);
     }
 
     @Override
@@ -178,5 +170,10 @@ public class MovieActivity extends AppCompatActivity implements
         int nColumns = width / widthDivider;
         if (nColumns < 2) return 2;
         return nColumns;
+    }
+
+    @Override
+    public void onFavoriteClick(int index, boolean favorite) {
+        presenter.onMoviesSaved().get(index).setFavorite(favorite);
     }
 }

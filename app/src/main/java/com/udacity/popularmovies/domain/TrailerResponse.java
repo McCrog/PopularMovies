@@ -17,24 +17,24 @@
 package com.udacity.popularmovies.domain;
 
 import com.google.gson.annotations.SerializedName;
-import com.udacity.popularmovies.model.Movie;
+import com.udacity.popularmovies.model.Trailer;
 
 import java.util.List;
 
 /**
- * Created by McCrog on 24/02/2018.
+ * Created by alex on 26/03/2018.
  *
  */
 
-public class MoviesResponse {
+public class TrailerResponse {
     @SerializedName("results")
-    private List<Movie> results;
+    private List<Trailer> results;
 
-    public List<Movie> getResults() {
+    public List<Trailer> getResults() {
         return results;
     }
 
-    public void setResults(List<Movie> results) {
+    public void setResults(List<Trailer> results) {
         this.results = results;
     }
 }
