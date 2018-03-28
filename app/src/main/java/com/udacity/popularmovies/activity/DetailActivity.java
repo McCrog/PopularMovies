@@ -17,8 +17,11 @@
 package com.udacity.popularmovies.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,7 +47,8 @@ import butterknife.ButterKnife;
  * Created by McCrog on 25/02/2018.
  */
 
-public class DetailActivity extends AppCompatActivity implements DetailContract.View {
+public class DetailActivity extends AppCompatActivity implements DetailContract.View,
+        TrailerAdapter.TrailerOnClickHandler {
     public static final String MOVIE_DETAILS = "MOVIE_DETAILS";
 
     private Movie movie;
@@ -64,6 +68,14 @@ public class DetailActivity extends AppCompatActivity implements DetailContract.
     MaterialFavoriteButton materialFavoriteButton;
     @BindString(R.string.detail_error_message)
     String detailErrorMessage;
+
+    @BindView(R.id.trailers_recycle_view)
+    RecyclerView trailersRecyclerView;
+    @BindView(R.id.reviews_recycle_view)
+    RecyclerView reviewsRecyclerView;
+
+    private TrailerAdapter trailerAdapter;
+    private ReviewAdapter reviewAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +115,16 @@ public class DetailActivity extends AppCompatActivity implements DetailContract.
             }
         });
 
+        RecyclerView.LayoutManager mTrailerLayoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        trailersRecyclerView.setLayoutManager(mTrailerLayoutManager);
+        trailerAdapter = new TrailerAdapter(DetailActivity.this);
+        trailersRecyclerView.setAdapter(trailerAdapter);
+
+        reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reviewAdapter = new ReviewAdapter();
+        reviewsRecyclerView.setAdapter(reviewAdapter);
+
         String id = String.valueOf(movie.getId());
 
         MovieNetworkModel movieNetworkModel = new MovieNetworkModel();
@@ -110,6 +132,28 @@ public class DetailActivity extends AppCompatActivity implements DetailContract.
         presenter.attachView(this);
 
         presenter.viewIsReady();
+    }
+
+    @Override
+    public void showTrailers(List<Trailer> trailers) {
+        trailerAdapter.setData(trailers);
+    }
+
+    @Override
+    public void showReviews(List<Review> reviews) {
+        reviewAdapter.setData(reviews);
+    }
+
+    @Override
+    public void showToast(int resId) {
+        Toast toast = Toast.makeText(this, resId, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
+    public void onClick(String key) {
+        String baseUrl = "http://www.youtube.com/watch?v=";
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(baseUrl + key)));
     }
 
     private void init(Movie movie) {
@@ -128,21 +172,5 @@ public class DetailActivity extends AppCompatActivity implements DetailContract.
 
     private String getReleaseYear(String releaseDate) {
         return releaseDate.split("-")[0];
-    }
-
-    @Override
-    public void showTrailers(List<Trailer> trailers) {
-
-    }
-
-    @Override
-    public void showReviews(List<Review> reviews) {
-
-    }
-
-    @Override
-    public void showToast(int resId) {
-        Toast toast = Toast.makeText(this, resId, Toast.LENGTH_SHORT);
-        toast.show();
     }
 }

@@ -34,6 +34,6 @@ public interface DetailContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void onTrailerClick(int index);
+//        void onTrailerClick(int index);
     }
 }

@@ -42,11 +42,16 @@ public class MovieNetworkModel {
     private static final String TAG = MovieNetworkModel.class.getSimpleName();
 
     private List<Movie> movies = new ArrayList<>();
+    private List<Trailer> trailers = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
+
     private Call<MoviesResponse> popularMovies;
+    private Call<TrailerResponse> trailersCall;
+    private Call<ReviewResponse> reviewCall;
+
+    private MoviesAPIService moviesApiService = ApiClient.getClient().create(MoviesAPIService.class);
 
     public void callMovies(int sortPreference, final LoadCallback callback) {
-        MoviesAPIService moviesApiService = ApiClient.getClient().create(MoviesAPIService.class);
-
         if (sortPreference == APP_PREFERENCE_POPULAR) {
             popularMovies = moviesApiService.getPopularMovies(API_KEY);
         } else {
@@ -70,32 +75,10 @@ public class MovieNetworkModel {
         });
     }
 
-    public Movie get(int index) {
-        if (movies != null) {
-            return movies.get(index);
-        }
-        return null;
-    }
-
-    public void canselCallback() {
-        if (popularMovies != null) {
-            popularMovies.cancel();
-        }
-    }
-
-    public List<Movie> getList() {
-        return movies;
-    }
-
-
-    private List<Trailer> trailers = new ArrayList<>();
     public void callTrailers(String id, final LoadCallback callback) {
-        MoviesAPIService moviesApiService = ApiClient.getClient().create(MoviesAPIService.class);
-
-        Call<TrailerResponse> trailersCall = moviesApiService.getMovieTrailers(id, API_KEY);
+        trailersCall = moviesApiService.getMovieTrailers(id, API_KEY);
 
         trailersCall.enqueue(new Callback<TrailerResponse>() {
-
             @Override
             public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
                 trailers = response.body().getResults();
@@ -111,14 +94,10 @@ public class MovieNetworkModel {
         });
     }
 
-    private List<Review> reviews = new ArrayList<>();
     public void callReviews(String id, final LoadCallback callback) {
-        MoviesAPIService moviesApiService = ApiClient.getClient().create(MoviesAPIService.class);
-
-        Call<ReviewResponse> reviewCall = moviesApiService.getMovieReviews(id, API_KEY);
+        reviewCall = moviesApiService.getMovieReviews(id, API_KEY);
 
         reviewCall.enqueue(new Callback<ReviewResponse>() {
-
             @Override
             public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
                 reviews = response.body().getResults();
@@ -134,11 +113,37 @@ public class MovieNetworkModel {
         });
     }
 
+    public void cancelMovieCallback() {
+        cancelCallback(popularMovies);
+    }
+
+    public void cancelDetailCallback() {
+        cancelCallback(trailersCall);
+        cancelCallback(reviewCall);
+    }
+
+    public Movie get(int index) {
+        if (movies != null) {
+            return movies.get(index);
+        }
+        return null;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
     public List<Trailer> getTrailers() {
         return trailers;
     }
 
     public List<Review> getReviews() {
         return reviews;
+    }
+
+    private <T> void cancelCallback(Call<T> call) {
+        if (call != null) {
+            call.cancel();
+        }
     }
 }

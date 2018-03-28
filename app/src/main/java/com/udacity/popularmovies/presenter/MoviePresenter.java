@@ -66,7 +66,7 @@ public class MoviePresenter extends BasePresenterImpl<MovieContract.View> implem
 
     @Override
     public void detachView() {
-        model.canselCallback();
+        model.cancelMovieCallback();
         super.detachView();
     }
 
@@ -84,6 +84,6 @@ public class MoviePresenter extends BasePresenterImpl<MovieContract.View> implem
     }
 
     public List<Movie> onMoviesSaved() {
-        return model.getList();
+        return model.getMovies();
     }
 }

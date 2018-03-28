@@ -34,9 +34,10 @@
         <ImageView
             android:id="@+id/poster_small_iv"
             android:layout_width="@dimen/detail_poster_w154_width"
-            android:layout_height="@dimen/detail_poster_w154_height"
+            android:layout_height="@dimen/detail_poster_w231_height"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_small"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/poster"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/original_title_tv"
@@ -62,6 +63,7 @@
 
         <TextView
             android:id="@+id/overview_tv"
+            style="@android:style/TextAppearance.Small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_medium"
@@ -81,14 +83,22 @@
             app:mfb_color="white"
             app:mfb_type="heart" />
 
-        <com.google.android.youtube.player.YouTubePlayerView
-            android:id="@+id/youtube_player"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trailers_recycle_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="visible"
+            android:layout_margin="@dimen/margin_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/overview_tv" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reviews_recycle_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trailers_recycle_view" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -49,10 +49,11 @@ public class DetailPresenter extends BasePresenterImpl<DetailContract.View> impl
     }
 
     public void loadTrailers() {
-        model.callReviews(id, new LoadCallback() {
+        model.callTrailers(id, new LoadCallback() {
             @Override
             public <T> void onComplete(List<T> trailers) {
                 getView().showToast(R.string.network_complete);
+
                 getView().showTrailers((List<Trailer>) trailers);
             }
 
@@ -84,12 +85,7 @@ public class DetailPresenter extends BasePresenterImpl<DetailContract.View> impl
 
     @Override
     public void detachView() {
-        model.canselCallback();
+        model.cancelDetailCallback();
         super.detachView();
-    }
-
-    @Override
-    public void onTrailerClick(int index) {
-
     }
 }
