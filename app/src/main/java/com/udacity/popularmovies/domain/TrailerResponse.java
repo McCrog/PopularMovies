@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.utilities;
+package com.udacity.popularmovies.domain;
 
-import com.udacity.popularmovies.model.MoviesResponse;
+import com.google.gson.annotations.SerializedName;
+import com.udacity.popularmovies.model.Trailer;
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import java.util.List;
 
 /**
- * Created by alex on 23/02/2018.
+ * Created by alex on 26/03/2018.
  *
  */
 
-public interface MoviesAPIService {
-    @GET("movie/popular")
-    Call<MoviesResponse> getPopularMovies(@Query("api_key") String apiKey);
+public class TrailerResponse {
+    @SerializedName("results")
+    private List<Trailer> results;
 
-    @GET("movie/top_rated")
-    Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String apiKey);
+    public List<Trailer> getResults() {
+        return results;
+    }
+
+    public void setResults(List<Trailer> results) {
+        this.results = results;
+    }
 }

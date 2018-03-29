@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.model;
-
-import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
+package com.udacity.popularmovies.utilities;
 
 /**
- * Created by McCrog on 24/02/2018.
+ * Created by McCrog on 07/03/2018.
  *
  */
 
-public class MoviesResponse {
-    @SerializedName("results")
-    private List<Movie> results;
-
-    public List<Movie> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Movie> results) {
-        this.results = results;
-    }
+public class Constants {
+    public static final String APP_PREFERENCES = "APP_PREFERENCES";
+    public static final String APP_SORT_PREFERENCE = "SORT_PREFERENCE";
+    public static final int APP_PREFERENCE_POPULAR = 0;
+    public static final int APP_PREFERENCE_TOP_RATED = 1;
 }

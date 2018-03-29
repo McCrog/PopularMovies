@@ -13,25 +13,18 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/poster_iv"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/trailer_button"
+        style="@android:style/TextAppearance.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/poster" />
-
-    <com.github.ivbaranov.mfb.MaterialFavoriteButton
-        android:id="@+id/main_favorite_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_large"
-        app:mfb_color="white"
-        app:mfb_type="heart" />
-
-</android.support.constraint.ConstraintLayout>
+        android:drawablePadding="8sp"
+        android:drawableStart="@drawable/yt_icon_rgb"
+        android:gravity="start|center_vertical" />
+</LinearLayout>
