@@ -49,6 +49,7 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements DetailContract.View,
         TrailerAdapter.TrailerOnClickHandler {
+
     public static final String MOVIE_DETAILS = "MOVIE_DETAILS";
 
     private Movie movie;
@@ -115,9 +116,7 @@ public class DetailActivity extends AppCompatActivity implements DetailContract.
             }
         });
 
-        RecyclerView.LayoutManager mTrailerLayoutManager =
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        trailersRecyclerView.setLayoutManager(mTrailerLayoutManager);
+        trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         trailerAdapter = new TrailerAdapter(DetailActivity.this);
         trailersRecyclerView.setAdapter(trailerAdapter);
 

@@ -20,7 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
 
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.model.Trailer;
@@ -60,7 +60,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
     @Override
     public void onBindViewHolder(TrailerViewHolder holder, int position) {
-        holder.trailerImage.setImageResource(R.drawable.yt_logo_rgb_black);
+        holder.trailerButton.setText(trailers.get(position).getName());
     }
 
     @Override
@@ -76,14 +76,14 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
 
     class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.trailer_image)
-        ImageView trailerImage;
+        @BindView(R.id.trailer_button)
+        Button trailerButton;
 
         public TrailerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            itemView.setOnClickListener(this);
+            trailerButton.setOnClickListener(this);
         }
 
         @Override

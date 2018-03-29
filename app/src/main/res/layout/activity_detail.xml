@@ -34,7 +34,7 @@
         <ImageView
             android:id="@+id/poster_small_iv"
             android:layout_width="@dimen/detail_poster_w154_width"
-            android:layout_height="@dimen/detail_poster_w231_height"
+            android:layout_height="@dimen/detail_poster_w154_height"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_small"
             android:adjustViewBounds="true"
