@@ -40,6 +40,10 @@
                     android:id="@+id/sort_by_top_rated"
                     android:checked="false"
                     android:title="@string/sort_by_top_rated" />
+                <item
+                    android:id="@+id/sort_by_favorite"
+                    android:checked="false"
+                    android:title="@string/sort_by_favorites" />
             </group>
         </menu>
     </item>

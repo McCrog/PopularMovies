@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies;
+package com.udacity.popularmovies.ui.list;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.model.Movie;
 import com.udacity.popularmovies.utilities.ImageUtils;
 
@@ -37,20 +38,20 @@ import butterknife.ButterKnife;
  *
  */
 
-public class MoviesImageAdapter extends RecyclerView.Adapter<MoviesImageAdapter.MovieViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private final List<Movie> movies = new ArrayList<>();
     private final Context context;
-    private final MoviesImageAdapterOnClickHandler mClickHandler;
+    private final MovieOnClickHandler mClickHandler;
 
     /**
      * The interface that receives onClick messages.
      */
-    public interface MoviesImageAdapterOnClickHandler {
+    public interface MovieOnClickHandler {
         void onClick(int index);
     }
 
-    public MoviesImageAdapter(Context context, MoviesImageAdapterOnClickHandler clickHandler) {
+    public MovieAdapter(Context context, MovieOnClickHandler clickHandler) {
         this.context = context;
         this.mClickHandler = clickHandler;
     }

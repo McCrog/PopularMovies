@@ -16,21 +16,17 @@
 
 package com.udacity.popularmovies.utilities;
 
-import com.udacity.popularmovies.model.MoviesResponse;
-
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-
 /**
- * Created by alex on 23/02/2018.
+ * Created by McCrog on 07/03/2018.
  *
  */
 
-public interface MoviesAPIService {
-    @GET("movie/popular")
-    Call<MoviesResponse> getPopularMovies(@Query("api_key") String apiKey);
+public class Constants {
+    public static final String APP_PREFERENCES = "APP_PREFERENCES";
+    public static final String APP_SORT_PREFERENCE = "SORT_PREFERENCE";
+    public static final int APP_PREFERENCE_POPULAR = 0;
+    public static final int APP_PREFERENCE_TOP_RATED = 1;
+    public static final int APP_PREFERENCE_FAVORITE = 2;
 
-    @GET("movie/top_rated")
-    Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String apiKey);
+    public static final String MOVIE_ID = "MOVIE_ID";
 }

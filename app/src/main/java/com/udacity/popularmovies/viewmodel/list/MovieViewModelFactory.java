@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package com.udacity.popularmovies.model;
+package com.udacity.popularmovies.viewmodel.list;
 
-import com.google.gson.annotations.SerializedName;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 
-import java.util.List;
+import com.udacity.popularmovies.data.MovieRepository;
 
-/**
- * Created by McCrog on 24/02/2018.
- *
- */
+public class MovieViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-public class MoviesResponse {
-    @SerializedName("results")
-    private List<Movie> results;
+    private final MovieRepository mRepository;
 
-    public List<Movie> getResults() {
-        return results;
+    public MovieViewModelFactory(MovieRepository repository) {
+        this.mRepository = repository;
     }
 
-    public void setResults(List<Movie> results) {
-        this.results = results;
+    @Override
+    public <T extends ViewModel> T create(Class<T> modelClass) {
+        //noinspection unchecked
+        return (T) new MovieActivityViewModel(mRepository);
     }
 }
