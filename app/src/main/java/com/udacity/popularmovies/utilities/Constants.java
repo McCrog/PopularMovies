@@ -29,4 +29,5 @@ public class Constants {
     public static final int APP_PREFERENCE_FAVORITE = 2;
 
     public static final String MOVIE_ID = "MOVIE_ID";
+    public static final String MOVIE_INDEX = "MOVIE_INDEX";
 }

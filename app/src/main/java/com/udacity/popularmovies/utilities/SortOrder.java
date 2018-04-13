@@ -22,8 +22,8 @@ import android.support.annotation.StringDef;
  * Created by alex on 07/04/2018.
  */
 
-@StringDef({ Filter.POPULAR, Filter.TOP_RATED, Filter.FAVORITES })
-public @interface Filter {
+@StringDef({ SortOrder.POPULAR, SortOrder.TOP_RATED, SortOrder.FAVORITES })
+public @interface SortOrder {
     String POPULAR = "popular";
     String TOP_RATED = "top_rated";
     String FAVORITES = "favorites";

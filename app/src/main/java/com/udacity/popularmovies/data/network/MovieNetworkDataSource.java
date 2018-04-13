@@ -27,7 +27,7 @@ import com.udacity.popularmovies.data.network.response.TrailerResponse;
 import com.udacity.popularmovies.model.Movie;
 import com.udacity.popularmovies.model.Review;
 import com.udacity.popularmovies.model.Trailer;
-import com.udacity.popularmovies.utilities.Filter;
+import com.udacity.popularmovies.utilities.SortOrder;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class MovieNetworkDataSource {
     private static final String LOG_TAG = MovieNetworkDataSource.class.getSimpleName();
 
     private final MutableLiveData<List<Movie>> mDownloadedMovies;
-    private NetworkDataApi networkDataApi = NetworkDataService.getNetworkData();
+    private NetworkDataApi mNetworkDataApi = NetworkDataService.getNetworkService();
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
@@ -72,17 +72,16 @@ public class MovieNetworkDataSource {
     public void fetchMovies(int sortPreference) {
         Call<MovieResponse> popularMovies;
         if (sortPreference == APP_PREFERENCE_POPULAR) {
-            popularMovies = networkDataApi.getMovies(Filter.POPULAR);
+            popularMovies = mNetworkDataApi.getMovies(SortOrder.POPULAR);
         } else {
-            popularMovies = networkDataApi.getMovies(Filter.TOP_RATED);
+            popularMovies = mNetworkDataApi.getMovies(SortOrder.TOP_RATED);
         }
 
         popularMovies.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    mDownloadedMovies.postValue(response.body().getResults());
-                    Log.d(LOG_TAG, "Movies received");
+                    mDownloadedMovies.setValue(response.body().getResults());
                 }
             }
 
@@ -92,21 +91,18 @@ public class MovieNetworkDataSource {
                 Log.e(LOG_TAG, t.toString());
             }
         });
-        // TODO: Remove comment
-        // return mDownloadedMovies;
     }
 
     public LiveData<List<Trailer>> fetchTrailers(int id) {
-        Call<TrailerResponse> trailersCall = networkDataApi.getMovieTrailers(id);
+        Call<TrailerResponse> trailersCall = mNetworkDataApi.getMovieTrailers(id);
 
-        final MutableLiveData<List<Trailer>> mDownloadedTrailers = new MutableLiveData<>();
+        final MutableLiveData<List<Trailer>> downloadedTrailers = new MutableLiveData<>();
 
         trailersCall.enqueue(new Callback<TrailerResponse>() {
             @Override
             public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    mDownloadedTrailers.setValue(response.body().getResults());
-                    Log.d(LOG_TAG, "Trailers received");
+                    downloadedTrailers.setValue(response.body().getResults());
                 }
             }
 
@@ -116,20 +112,19 @@ public class MovieNetworkDataSource {
             }
         });
 
-        return mDownloadedTrailers;
+        return downloadedTrailers;
     }
 
     public LiveData<List<Review>> fetchReviews(int id) {
-        Call<ReviewResponse> reviewCall = networkDataApi.getMovieReviews(id);
+        Call<ReviewResponse> reviewCall = mNetworkDataApi.getMovieReviews(id);
 
-        final MutableLiveData<List<Review>> mDownloadedReviews = new MutableLiveData<>();
+        final MutableLiveData<List<Review>> downloadedReviews = new MutableLiveData<>();
 
         reviewCall.enqueue(new Callback<ReviewResponse>() {
             @Override
             public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    mDownloadedReviews.setValue(response.body().getResults());
-                    Log.d(LOG_TAG, "Reviews received");
+                    downloadedReviews.setValue(response.body().getResults());
                 }
             }
 
@@ -139,31 +134,16 @@ public class MovieNetworkDataSource {
             }
         });
 
-        return mDownloadedReviews;
+        return downloadedReviews;
     }
 
-    public MutableLiveData<List<Movie>> getDownloadedMovies() {
+    public LiveData<List<Movie>> getDownloadedMovies() {
         return mDownloadedMovies;
     }
 
-    // TODO: Add EMPTY Movie?
-    public Movie get(int index) {
-        return mDownloadedMovies.getValue() == null ? null : mDownloadedMovies.getValue().get(index);
-    }
-
-    // TODO: Remove
-    public void cancelMovieCallback() {
-        cancelCallback(null);
-    }
-
-    public void cancelDetailCallback() {
-        cancelCallback(null);
-        cancelCallback(null);
-    }
-
-    private <T> void cancelCallback(Call<T> call) {
-        if (call != null) {
-            call.cancel();
-        }
+    public LiveData<Movie> getMovie(int index) {
+        MutableLiveData<Movie> movie = new MutableLiveData<>();
+        movie.setValue(mDownloadedMovies.getValue().get(index));
+        return movie;
     }
 }

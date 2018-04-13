@@ -40,8 +40,8 @@ import butterknife.ButterKnife;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private final List<Movie> movies = new ArrayList<>();
-    private final Context context;
+    private final List<Movie> mMovies = new ArrayList<>();
+    private final Context mContext;
     private final MovieOnClickHandler mClickHandler;
 
     /**
@@ -52,7 +52,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     public MovieAdapter(Context context, MovieOnClickHandler clickHandler) {
-        this.context = context;
+        this.mContext = context;
         this.mClickHandler = clickHandler;
     }
 
@@ -64,19 +64,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        Movie movie = movies.get(position);
+        Movie movie = mMovies.get(position);
 
-        ImageUtils.loadImage(context, movie.getPosterPath(), holder.poster, 2);
+        ImageUtils.loadImage(mContext, movie.getPosterPath(), holder.poster, 2);
     }
 
     @Override
     public int getItemCount() {
-        return (movies == null) ? 0 : movies.size();
+        return (mMovies == null) ? 0 : mMovies.size();
     }
 
     public void setData(List<Movie> newMovies) {
-        movies.clear();
-        movies.addAll(newMovies);
+        mMovies.clear();
+        mMovies.addAll(newMovies);
         notifyDataSetChanged();
     }
 

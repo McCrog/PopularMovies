@@ -36,7 +36,15 @@ import java.util.List;
 public class MovieDatabaseSource {
     private static final String LOG_TAG = MovieDatabaseSource.class.getSimpleName();
 
-    private final ContentResolver contentResolver;
+    private static final int MOVIE_ID = 1;
+    private static final int POSTER_PATH = 2;
+    private static final int ORIGINAL_TITLE = 3;
+    private static final int OVERVIEW = 4;
+    private static final int RELEASE_DATE = 5;
+    private static final int VOTE_AVERAGE = 6;
+    private static final int FAVORITE = 7;
+
+    private final ContentResolver mContentResolver;
     private final MutableLiveData<List<Movie>> mDatabaseMovies;
 
     // For Singleton instantiation
@@ -44,7 +52,7 @@ public class MovieDatabaseSource {
     private static MovieDatabaseSource sInstance;
 
     private MovieDatabaseSource(Context context) {
-        contentResolver = context.getContentResolver();
+        mContentResolver = context.getContentResolver();
         mDatabaseMovies = new MutableLiveData<>();
     }
 
@@ -64,16 +72,13 @@ public class MovieDatabaseSource {
 
 
     public LiveData<List<Movie>> getMovies() {
-        loadMovies();
-        Log.d(LOG_TAG, "Load movies from DB");
         return mDatabaseMovies;
     }
 
     public LiveData<Movie> getMovie(int id) {
-        Log.d(LOG_TAG, "Get movie from DB with ID " + id);
         String mSelectionClause = MovieDatabaseContract.MovieEntry.COLUMN_MOVIE_ID + " =?";
         String[] mSelectionArgs = {String.valueOf(id)};
-        Cursor cursor = contentResolver.query(MovieDatabaseContract.MovieEntry.CONTENT_URI,
+        Cursor cursor = mContentResolver.query(MovieDatabaseContract.MovieEntry.CONTENT_URI,
                 null,
                 mSelectionClause,
                 mSelectionArgs,
@@ -84,19 +89,39 @@ public class MovieDatabaseSource {
         MutableLiveData<Movie> movieLiveData = new MutableLiveData<>();
 
         if (cursor.moveToFirst()) {
-            Integer movieId = cursor.getInt(1);
-            String posterPath = cursor.getString(2);
-            String originalTitle = cursor.getString(3);
-            String overview = cursor.getString(4);
-            String releaseDate = cursor.getString(5);
-            Double voteAverage = cursor.getDouble(6);
-            boolean favorite = convertIntegerToBoolean(cursor.getInt(7));
+            Integer movieId = cursor.getInt(MOVIE_ID);
+            String posterPath = cursor.getString(POSTER_PATH);
+            String originalTitle = cursor.getString(ORIGINAL_TITLE);
+            String overview = cursor.getString(OVERVIEW);
+            String releaseDate = cursor.getString(RELEASE_DATE);
+            Double voteAverage = cursor.getDouble(VOTE_AVERAGE);
+            boolean favorite = convertIntegerToBoolean(cursor.getInt(FAVORITE));
             movie = new Movie(movieId, posterPath, originalTitle, overview, releaseDate, voteAverage, favorite);
-            movieLiveData.setValue(movie);
+            movieLiveData.postValue(movie);
         }
         cursor.close();
 
         return movieLiveData;
+    }
+
+    public void saveMovie(Movie movie) {
+        ContentValues values = new ContentValues();
+
+        values.put(MovieDatabaseContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
+        values.put(MovieDatabaseContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+        values.put(MovieDatabaseContract.MovieEntry.COLUMN_ORIGINAL_TITLE, movie.getOriginalTitle());
+        values.put(MovieDatabaseContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+        values.put(MovieDatabaseContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+        values.put(MovieDatabaseContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
+        values.put(MovieDatabaseContract.MovieEntry.COLUMN_FAVORITE, convertBooleanToInteger(movie.isFavorite()));
+
+        mContentResolver.insert(MovieDatabaseContract.MovieEntry.CONTENT_URI, values);
+    }
+
+    public void deleteMovie(int id) {
+        String mSelectionClause = MovieDatabaseContract.MovieEntry.COLUMN_MOVIE_ID + " =?";
+        String[] mSelectionArgs = {String.valueOf(id)};
+        mContentResolver.delete(MovieDatabaseContract.MovieEntry.CONTENT_URI, mSelectionClause, mSelectionArgs);
     }
 
     public void saveMovies(List<Movie> list) {
@@ -114,38 +139,37 @@ public class MovieDatabaseSource {
             contentValues[i] = values;
         }
 
-        contentResolver.bulkInsert(MovieDatabaseContract.MovieEntry.CONTENT_URI, contentValues);
-    }
-
-    public void saveMovie(Movie movie) {
-        ContentValues values = new ContentValues();
-
-        values.put(MovieDatabaseContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
-        values.put(MovieDatabaseContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
-        values.put(MovieDatabaseContract.MovieEntry.COLUMN_ORIGINAL_TITLE, movie.getOriginalTitle());
-        values.put(MovieDatabaseContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
-        values.put(MovieDatabaseContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
-        values.put(MovieDatabaseContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
-        values.put(MovieDatabaseContract.MovieEntry.COLUMN_FAVORITE, convertBooleanToInteger(movie.isFavorite()));
-
-        contentResolver.insert(MovieDatabaseContract.MovieEntry.CONTENT_URI, values);
+        mContentResolver.bulkInsert(MovieDatabaseContract.MovieEntry.CONTENT_URI, contentValues);
     }
 
     public void deleteMovies() {
-        contentResolver.delete(MovieDatabaseContract.MovieEntry.CONTENT_URI, null, null);
+        mContentResolver.delete(MovieDatabaseContract.MovieEntry.CONTENT_URI, null, null);
     }
 
-    public void deleteMovie(Movie movie) {
+    public boolean isExist(int id) {
         String mSelectionClause = MovieDatabaseContract.MovieEntry.COLUMN_MOVIE_ID + " =?";
-        String[] mSelectionArgs = {String.valueOf(movie.getId())};
-        contentResolver.delete(MovieDatabaseContract.MovieEntry.CONTENT_URI, mSelectionClause, mSelectionArgs);
+        String[] mSelectionArgs = {String.valueOf(id)};
+        Cursor cursor = mContentResolver.query(MovieDatabaseContract.MovieEntry.CONTENT_URI,
+                null,
+                mSelectionClause,
+                mSelectionArgs,
+                null
+        );
+
+        boolean isExist = false;
+
+        if (cursor.moveToFirst()) {
+            isExist = true;
+        }
+        cursor.close();
+
+        return isExist;
     }
 
-    // TODO: FIX order of the variable
-    private void loadMovies() {
+    public void loadMovies() {
         List<Movie> movies = new ArrayList<>();
 
-        Cursor cursor = contentResolver.query(MovieDatabaseContract.MovieEntry.CONTENT_URI,
+        Cursor cursor = mContentResolver.query(MovieDatabaseContract.MovieEntry.CONTENT_URI,
                 null,
                 null,
                 null,
@@ -153,13 +177,13 @@ public class MovieDatabaseSource {
         );
 
         while (cursor.moveToNext()) {
-            Integer id = cursor.getInt(1);
-            String posterPath = cursor.getString(2);
-            String originalTitle = cursor.getString(3);
-            String overview = cursor.getString(4);
-            String releaseDate = cursor.getString(5);
-            Double voteAverage = cursor.getDouble(6);
-            boolean favorite = convertIntegerToBoolean(cursor.getInt(7));
+            Integer id = cursor.getInt(MOVIE_ID);
+            String posterPath = cursor.getString(POSTER_PATH);
+            String originalTitle = cursor.getString(ORIGINAL_TITLE);
+            String overview = cursor.getString(OVERVIEW);
+            String releaseDate = cursor.getString(RELEASE_DATE);
+            Double voteAverage = cursor.getDouble(VOTE_AVERAGE);
+            boolean favorite = convertIntegerToBoolean(cursor.getInt(FAVORITE));
 
             movies.add(new Movie(id, posterPath, originalTitle, overview, releaseDate, voteAverage, favorite));
         }

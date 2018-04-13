@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
 
-    private final List<Trailer> trailers = new ArrayList<>();
+    private final List<Trailer> mTrailers = new ArrayList<>();
     private final TrailerOnClickHandler mClickHandler;
 
     /**
@@ -60,17 +60,17 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
     @Override
     public void onBindViewHolder(TrailerViewHolder holder, int position) {
-        holder.trailerButton.setText(trailers.get(position).getName());
+        holder.trailerButton.setText(mTrailers.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return trailers.size();
+        return mTrailers.size();
     }
 
     public void setData(List<Trailer> newTrailers) {
-        trailers.clear();
-        trailers.addAll(newTrailers);
+        mTrailers.clear();
+        mTrailers.addAll(newTrailers);
         notifyDataSetChanged();
     }
 
@@ -89,7 +89,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            mClickHandler.onClick(trailers.get(position).getKey());
+            mClickHandler.onClick(mTrailers.get(position).getKey());
         }
     }
 }

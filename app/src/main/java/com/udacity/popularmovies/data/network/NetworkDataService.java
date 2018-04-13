@@ -39,25 +39,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkDataService {
 
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
-    private NetworkDataApi networkDataApi;
 
-    public NetworkDataService() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(getOkHttpClient())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        networkDataApi = retrofit.create(NetworkDataApi.class);
+    private NetworkDataService() {
     }
 
-    public NetworkDataApi getNetwork() {
-        return networkDataApi;
-    }
-
-    // TODO: Remove
-    public static NetworkDataApi getNetworkData() {
+    public static NetworkDataApi getNetworkService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(getOkHttpClient())

@@ -30,15 +30,17 @@ public class DetailViewModelFactory extends ViewModelProvider.NewInstanceFactory
 
     private final MovieRepository mRepository;
     private int mId;
+    private int mIndex;
 
-    public DetailViewModelFactory(MovieRepository repository, int id) {
-        this.mRepository = repository;
-        this.mId = id;
+    public DetailViewModelFactory(MovieRepository repository, int id, int index) {
+        mRepository = repository;
+        mId = id;
+        mIndex = index;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new DetailActivityViewModel(mRepository, mId);
+        return (T) new DetailActivityViewModel(mRepository, mId, mIndex);
     }
 }

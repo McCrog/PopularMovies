@@ -37,11 +37,13 @@ public class DetailActivityViewModel extends ViewModel {
     private final LiveData<List<Review>> mReview;
     private MovieRepository mRepository;
     private int mId;
+    private int mIndex;
 
-    public DetailActivityViewModel(MovieRepository repository, int id) {
+    public DetailActivityViewModel(MovieRepository repository, int id, int index) {
         mRepository = repository;
         mId = id;
-        mMovie = mRepository.getMovie(mId);
+        mIndex = index;
+        mMovie = mRepository.getMovie(mId, mIndex);
         mTrailer = mRepository.getTrailers(mId);
         mReview = mRepository.getReviews(mId);
     }
@@ -56,5 +58,13 @@ public class DetailActivityViewModel extends ViewModel {
 
     public LiveData<List<Review>> getReviews() {
         return mReview;
+    }
+
+    public void addToFavorite() {
+        mRepository.saveFavorite(mIndex);
+    }
+
+    public void removeFromFavorite() {
+        mRepository.deleteFavorite(mId);
     }
 }

@@ -19,7 +19,7 @@ package com.udacity.popularmovies.data.network;
 import com.udacity.popularmovies.data.network.response.MovieResponse;
 import com.udacity.popularmovies.data.network.response.ReviewResponse;
 import com.udacity.popularmovies.data.network.response.TrailerResponse;
-import com.udacity.popularmovies.utilities.Filter;
+import com.udacity.popularmovies.utilities.SortOrder;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -31,14 +31,8 @@ import retrofit2.http.Path;
  */
 
 public interface NetworkDataApi {
-//    @GET("movie/popular")
-//    Call<MovieResponse> getPopularMovies(@Query("api_key") String apiKey);
-//
-//    @GET("movie/top_rated")
-//    Call<MovieResponse> getTopRatedMovies(@Query("api_key") String apiKey);
-
     @GET("movie/{sort_order}")
-    Call<MovieResponse> getMovies(@Path("sort_order") @Filter String sortOrder);
+    Call<MovieResponse> getMovies(@Path("sort_order") @SortOrder String sortOrder);
 
     @GET("movie/{id}/videos")
     Call<TrailerResponse> getMovieTrailers(@Path("id") int id);

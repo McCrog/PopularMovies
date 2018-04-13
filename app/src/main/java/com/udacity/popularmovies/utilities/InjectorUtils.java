@@ -38,26 +38,9 @@ public class InjectorUtils {
         return MovieRepository.getInstance(database, networkDataSource, sortPreferences);
     }
 
-    // TODO: Remove if not use
-    public static MovieNetworkDataSource provideNetworkDataSource(Context context) {
-        provideRepository(context.getApplicationContext());
-        return MovieNetworkDataSource.getInstance();
-    }
-
-    // TODO: Remove if not use
-    public static MovieDatabaseSource provideDatabaseSource(Context context) {
-        provideRepository(context.getApplicationContext());
-        return MovieDatabaseSource.getInstance(context.getApplicationContext());
-    }
-
-    // TODO: Remove if not use
-    public static SortPreferences provideSortPreferences(Context context) {
-        return SortPreferences.getInstance(context.getApplicationContext());
-    }
-
-    public static DetailViewModelFactory provideDetailViewModelFactory(Context context, int id) {
+    public static DetailViewModelFactory provideDetailViewModelFactory(Context context, int id, int index) {
         MovieRepository repository = provideRepository(context.getApplicationContext());
-        return new DetailViewModelFactory(repository, id);
+        return new DetailViewModelFactory(repository, id, index);
     }
 
     public static MovieViewModelFactory provideMovieActivityViewModelFactory(Context context) {

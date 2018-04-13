@@ -23,28 +23,24 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.model.Movie;
-import com.udacity.popularmovies.model.Review;
-import com.udacity.popularmovies.model.Trailer;
 import com.udacity.popularmovies.utilities.ImageUtils;
 import com.udacity.popularmovies.utilities.InjectorUtils;
 import com.udacity.popularmovies.viewmodel.detail.DetailActivityViewModel;
 import com.udacity.popularmovies.viewmodel.detail.DetailViewModelFactory;
 
-import java.util.List;
-
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.udacity.popularmovies.utilities.Constants.MOVIE_ID;
+import static com.udacity.popularmovies.utilities.Constants.MOVIE_INDEX;
 
 /**
  * Created by McCrog on 25/02/2018.
@@ -56,7 +52,7 @@ public class DetailActivity extends AppCompatActivity implements
     private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     @BindView(R.id.poster_small_iv)
-    ImageView posterIv;
+    ImageView mPosterIv;
     @BindView(R.id.original_title_tv)
     TextView mOriginalTitle;
     @BindView(R.id.overview_tv)
@@ -66,22 +62,22 @@ public class DetailActivity extends AppCompatActivity implements
     @BindView(R.id.vote_average_tv)
     TextView mVoteAverage;
     @BindView(R.id.detail_favorite_button)
-    MaterialFavoriteButton materialFavoriteButton;
+    MaterialFavoriteButton mMaterialFavoriteButton;
     @BindString(R.string.detail_error_message)
-    String detailErrorMessage;
+    String mDetailErrorMessage;
 
     @BindView(R.id.trailers_recycle_view)
-    RecyclerView trailersRecyclerView;
+    RecyclerView mTrailersRecyclerView;
     @BindView(R.id.reviews_recycle_view)
-    RecyclerView reviewsRecyclerView;
+    RecyclerView mReviewsRecyclerView;
 
-    private TrailerAdapter trailerAdapter;
-    private ReviewAdapter reviewAdapter;
+    private TrailerAdapter mTrailerAdapter;
+    private ReviewAdapter mReviewAdapter;
 
     private DetailActivityViewModel mViewModel;
-    private DetailViewModelFactory factory;
+    private DetailViewModelFactory mFactory;
 
-    private int id;
+    private boolean mIsFavorite = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,45 +88,20 @@ public class DetailActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
 
-        id = intent.getIntExtra(MOVIE_ID, 0);
+        int id = intent.getIntExtra(MOVIE_ID, 0);
+        int index = intent.getIntExtra(MOVIE_INDEX, 0);
 
-        factory = InjectorUtils.provideDetailViewModelFactory(this.getApplicationContext(), id);
+        mFactory = InjectorUtils.provideDetailViewModelFactory(this.getApplicationContext(), id, index);
 
         observeMovieData();
 
-        initFavoriteListener();
+        mTrailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mTrailerAdapter = new TrailerAdapter(DetailActivity.this);
+        mTrailersRecyclerView.setAdapter(mTrailerAdapter);
 
-        trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        trailerAdapter = new TrailerAdapter(DetailActivity.this);
-        trailersRecyclerView.setAdapter(trailerAdapter);
-
-        reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        reviewAdapter = new ReviewAdapter();
-        reviewsRecyclerView.setAdapter(reviewAdapter);
-    }
-
-    private void init(Movie movie) {
-        mOriginalTitle.setText(movie.getOriginalTitle());
-        mOverview.setText(movie.getOverview());
-        String year = getReleaseYear(movie.getReleaseDate());
-        mReleaseDate.setText(year);
-        mVoteAverage.setText(getString(R.string.vote_average, movie.getVoteAverage()));
-        materialFavoriteButton.setFavorite(movie.isFavorite(), false);
-
-        ImageUtils.loadImage(this, movie.getPosterPath(), posterIv, 1);
-    }
-
-    public void showTrailers(List<Trailer> trailers) {
-        trailerAdapter.setData(trailers);
-    }
-
-    public void showReviews(List<Review> reviews) {
-        reviewAdapter.setData(reviews);
-    }
-
-    public void showToast(int resId) {
-        Toast toast = Toast.makeText(this, resId, Toast.LENGTH_SHORT);
-        toast.show();
+        mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mReviewAdapter = new ReviewAdapter();
+        mReviewsRecyclerView.setAdapter(mReviewAdapter);
     }
 
     @Override
@@ -139,8 +110,21 @@ public class DetailActivity extends AppCompatActivity implements
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(baseUrl + key)));
     }
 
+    @OnClick(R.id.detail_favorite_button)
+    void onFavoriteButtonClick() {
+        if (mIsFavorite) {
+            mViewModel.removeFromFavorite();
+            mIsFavorite = false;
+            mMaterialFavoriteButton.setFavorite(false);
+        } else {
+            mViewModel.addToFavorite();
+            mIsFavorite = true;
+            mMaterialFavoriteButton.setFavorite(true);
+        }
+    }
+
     private void observeMovieData() {
-        mViewModel = ViewModelProviders.of(this, factory).get(DetailActivityViewModel.class);
+        mViewModel = ViewModelProviders.of(this, mFactory).get(DetailActivityViewModel.class);
 
         mViewModel.getMovie().observe(this, movie -> {
             // Update the UI
@@ -149,34 +133,25 @@ public class DetailActivity extends AppCompatActivity implements
 
         mViewModel.getTrailers().observe(this, trailers -> {
             // Update the Adapter
-            trailerAdapter.setData(trailers);
+            mTrailerAdapter.setData(trailers);
         });
 
         mViewModel.getReviews().observe(this, reviews -> {
             // Update the Adapter
-            reviewAdapter.setData(reviews);
+            mReviewAdapter.setData(reviews);
         });
     }
 
-    // TODO: replace with lambda
-    private void initFavoriteListener() {
-        materialFavoriteButton.setOnFavoriteChangeListener(new MaterialFavoriteButton.OnFavoriteChangeListener() {
-            @Override
-            public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
-                if (favorite) {
-//                    mMovie.setFavorite(true);
-                    Log.d(LOG_TAG, "Favorite TRUE" + " And id of film is " + id);
-                } else {
-//                    mMovie.setFavorite(false);
-                    Log.d(LOG_TAG, "Favorite FALSE");
-                }
-            }
-        });
-    }
+    private void init(Movie movie) {
+        mOriginalTitle.setText(movie.getOriginalTitle());
+        mOverview.setText(movie.getOverview());
+        String year = getReleaseYear(movie.getReleaseDate());
+        mReleaseDate.setText(year);
+        mVoteAverage.setText(getString(R.string.vote_average, movie.getVoteAverage()));
+        mIsFavorite = movie.isFavorite();
+        mMaterialFavoriteButton.setFavorite(mIsFavorite, false);
 
-    private void closeOnError() {
-        finish();
-        Toast.makeText(this, detailErrorMessage, Toast.LENGTH_SHORT).show();
+        ImageUtils.loadImage(this, movie.getPosterPath(), mPosterIv, 1);
     }
 
     private String getReleaseYear(String releaseDate) {

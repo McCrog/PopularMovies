@@ -33,8 +33,4 @@ public class TrailerResponse {
     public List<Trailer> getResults() {
         return results;
     }
-
-    public void setResults(List<Trailer> results) {
-        this.results = results;
-    }
 }

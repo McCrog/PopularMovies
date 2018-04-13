@@ -29,18 +29,17 @@ import static com.udacity.popularmovies.utilities.Constants.APP_SORT_PREFERENCE;
  *
  */
 
-// Completed: Implement singleton
 public class SortPreferences {
     private static final String LOG_TAG = SortPreferences.class.getSimpleName();
 
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences mSharedPreferences;
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
     private static SortPreferences sInstance;
 
     private SortPreferences(Context context) {
-        sharedPreferences = context.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+        mSharedPreferences = context.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
     }
 
     /**
@@ -64,10 +63,10 @@ public class SortPreferences {
     }
 
     public int getSortPreference() {
-        return sharedPreferences.getInt(APP_SORT_PREFERENCE, 0);
+        return mSharedPreferences.getInt(APP_SORT_PREFERENCE, 0);
     }
 
     private SharedPreferences.Editor getEditor() {
-        return sharedPreferences.edit();
+        return mSharedPreferences.edit();
     }
 }

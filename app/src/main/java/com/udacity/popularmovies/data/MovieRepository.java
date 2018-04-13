@@ -48,17 +48,6 @@ public class MovieRepository {
         mMovieDatabaseSource = movieDatabaseSource;
         mMovieNetworkDataSource = movieNetworkDataSource;
         mSortPreferences = sortPreferences;
-
-        LiveData<List<Movie>> networkData = mMovieNetworkDataSource.getDownloadedMovies();
-
-        networkData.observeForever(newMoviesFromNetwork -> {
-            deleteOldData();
-            Log.d(LOG_TAG, "Old movies deleted");
-            // Insert new movies data into Movies's database
-            mMovieDatabaseSource.saveMovies(newMoviesFromNetwork);
-            Log.d(LOG_TAG, "New movies inserted");
-            mMovieDatabaseSource.getMovies();
-        });
     }
 
     public synchronized static MovieRepository getInstance(MovieDatabaseSource movieDatabaseSource, MovieNetworkDataSource movieNetworkDataSource, SortPreferences sortPreferences) {
@@ -81,18 +70,38 @@ public class MovieRepository {
         if (currentSortPreference() <= 1) {
             startFetchMoviesFromNetwork();
         } else {
-            fetchFavoriteMoviesFromDb();
+            startFetchFavoriteMoviesFromDb();
         }
     }
 
     public LiveData<List<Movie>> getMovies() {
         initializeData();
+        return mMovieNetworkDataSource.getDownloadedMovies();
+    }
+
+    public LiveData<List<Movie>> getFavoriteMovies() {
+        initializeData();
         return mMovieDatabaseSource.getMovies();
     }
 
-    public LiveData<Movie> getMovie(int id) {
+    public LiveData<Movie> getMovie(int id, int index) {
         initializeData();
-        return mMovieDatabaseSource.getMovie(id);
+        if (mMovieDatabaseSource.isExist(id)) {
+            return mMovieDatabaseSource.getMovie(id);
+        } else {
+            return mMovieNetworkDataSource.getMovie(index);
+        }
+    }
+
+    public void saveFavorite(int index) {
+        Movie movie = mMovieNetworkDataSource.getMovie(index).getValue();
+        movie.setFavorite(true);
+        mMovieDatabaseSource.saveMovie(movie);
+    }
+
+    public void deleteFavorite(int id) {
+        mMovieDatabaseSource.deleteMovie(id);
+        mMovieDatabaseSource.loadMovies();
     }
 
     public LiveData<List<Trailer>> getTrailers(int id) {
@@ -103,22 +112,27 @@ public class MovieRepository {
         return mMovieNetworkDataSource.fetchReviews(id);
     }
 
-    public void updateData() {
+    public void updateData(int preference) {
+        mInitialized = false;
+        mSortPreferences.saveSortPreference(preference);
+        initializeData();
+    }
+
+    public void refreshData() {
         mInitialized = false;
         initializeData();
+    }
+
+    public int currentSortPreference() {
+        return mSortPreferences.getSortPreference();
     }
 
     private void startFetchMoviesFromNetwork() {
         mMovieNetworkDataSource.fetchMovies(currentSortPreference());
     }
 
-    // TODO Implement correct method
-    private void fetchFavoriteMoviesFromDb() {
-        mMovieDatabaseSource.getMovies();
-    }
-
-    private int currentSortPreference() {
-        return mSortPreferences.getSortPreference();
+    private void startFetchFavoriteMoviesFromDb() {
+        mMovieDatabaseSource.loadMovies();
     }
 
     private void deleteOldData() {

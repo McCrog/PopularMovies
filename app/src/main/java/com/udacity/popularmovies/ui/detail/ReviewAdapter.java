@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.TrailerViewHolder> {
 
-    private final List<Review> reviews = new ArrayList<>();
+    private final List<Review> mReviews = new ArrayList<>();
 
     @Override
     public TrailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -48,19 +48,19 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.TrailerVie
 
     @Override
     public void onBindViewHolder(TrailerViewHolder holder, int position) {
-        Review review = reviews.get(position);
+        Review review = mReviews.get(position);
         holder.author.setText(review.getAuthor());
         holder.content.setText(review.getContent());
     }
 
     @Override
     public int getItemCount() {
-        return reviews.size();
+        return mReviews.size();
     }
 
     public void setData(List<Review> newReviews) {
-        reviews.clear();
-        reviews.addAll(newReviews);
+        mReviews.clear();
+        mReviews.addAll(newReviews);
         notifyDataSetChanged();
     }
 

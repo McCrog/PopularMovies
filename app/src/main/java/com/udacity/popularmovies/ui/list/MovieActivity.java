@@ -19,7 +19,6 @@ package com.udacity.popularmovies.ui.list;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,18 +26,13 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.model.Movie;
 import com.udacity.popularmovies.ui.detail.DetailActivity;
 import com.udacity.popularmovies.utilities.InjectorUtils;
 import com.udacity.popularmovies.viewmodel.list.MovieActivityViewModel;
 import com.udacity.popularmovies.viewmodel.list.MovieViewModelFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,17 +41,17 @@ import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCE_FAVOR
 import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCE_POPULAR;
 import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCE_TOP_RATED;
 import static com.udacity.popularmovies.utilities.Constants.MOVIE_ID;
+import static com.udacity.popularmovies.utilities.Constants.MOVIE_INDEX;
 
 /**
  * Created by McCrog on 23/02/2018.
- *
  */
 
 public class MovieActivity extends AppCompatActivity implements
         MovieAdapter.MovieOnClickHandler {
 
     @BindView(R.id.movies_recycle_view)
-    RecyclerView recyclerView;
+    RecyclerView mRecyclerView;
 
     private MovieAdapter mMovieAdapter;
     private MovieActivityViewModel mViewModel;
@@ -72,34 +66,21 @@ public class MovieActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
 
         mMovieAdapter = new MovieAdapter(getApplicationContext(), this);
-        recyclerView.setAdapter(mMovieAdapter);
+        mRecyclerView.setAdapter(mMovieAdapter);
 
+        initObserver();
+    }
+
+    private void initObserver() {
         MovieViewModelFactory factory = InjectorUtils.provideMovieActivityViewModelFactory(this.getApplicationContext());
         mViewModel = ViewModelProviders.of(this, factory).get(MovieActivityViewModel.class);
 
-        mViewModel.getMovies().observe(this, movies -> {
+        mViewModel.getMoviesMediatorLiveData().observe(this, movies -> {
             mMovieAdapter.setData(movies);
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("movies", (ArrayList<? extends Parcelable>) mViewModel.getMovies().getValue());
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mMovieAdapter.setData(savedInstanceState.<Movie>getParcelableArrayList("movies"));
     }
 
     @Override
@@ -115,22 +96,19 @@ public class MovieActivity extends AppCompatActivity implements
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.refresh:
-                mViewModel.updateData();
+                mViewModel.refreshData();
                 return true;
             case R.id.sort_by_popular:
                 item.setChecked(true);
-                InjectorUtils.provideSortPreferences(this.getApplicationContext()).saveSortPreference(APP_PREFERENCE_POPULAR);
-                mViewModel.updateData();
+                mViewModel.updateData(APP_PREFERENCE_POPULAR);
                 return true;
             case R.id.sort_by_top_rated:
                 item.setChecked(true);
-                InjectorUtils.provideSortPreferences(this.getApplicationContext()).saveSortPreference(APP_PREFERENCE_TOP_RATED);
-                mViewModel.updateData();
+                mViewModel.updateData(APP_PREFERENCE_TOP_RATED);
                 return true;
             case R.id.sort_by_favorite:
                 item.setChecked(true);
-                InjectorUtils.provideSortPreferences(this.getApplicationContext()).saveSortPreference(APP_PREFERENCE_FAVORITE);
-                mViewModel.updateData();
+                mViewModel.updateData(APP_PREFERENCE_FAVORITE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -140,17 +118,17 @@ public class MovieActivity extends AppCompatActivity implements
     @Override
     public void onClick(int index) {
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(MOVIE_ID, mViewModel.getMovies().getValue().get(index).getId());
+
+        int sortPreference = mViewModel.getSortPreference();
+
+        if (sortPreference <= 1) {
+            intent.putExtra(MOVIE_ID, mViewModel.getMovies().getValue().get(index).getId());
+        } else {
+            intent.putExtra(MOVIE_ID, mViewModel.getFavoriteMovies().getValue().get(index).getId());
+        }
+
+        intent.putExtra(MOVIE_INDEX, index);
         startActivity(intent);
-    }
-
-    public void showMovies(List<Movie> movies) {
-        mMovieAdapter.setData(movies);
-    }
-
-    public void showToast(int resId) {
-        Toast toast = Toast.makeText(this, resId, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     private void setSortMenuItem(Menu menu) {
@@ -158,7 +136,7 @@ public class MovieActivity extends AppCompatActivity implements
         MenuItem topRatedMenuItem = menu.findItem(R.id.sort_by_top_rated);
         MenuItem favoriteMenuItem = menu.findItem(R.id.sort_by_favorite);
 
-        int sortPreference = InjectorUtils.provideSortPreferences(this.getApplicationContext()).getSortPreference();
+        int sortPreference = mViewModel.getSortPreference();
 
         if (sortPreference == APP_PREFERENCE_POPULAR) {
             popularMenuItem.setChecked(true);

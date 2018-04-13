@@ -16,20 +16,14 @@
 
 package com.udacity.popularmovies.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by McCrog on 23/02/2018.
  *
  */
 
-public class Movie implements Parcelable {
+public class Movie {
     @SerializedName("id")
     private Integer id;
 
@@ -50,10 +44,6 @@ public class Movie implements Parcelable {
 
     private boolean favorite;
 
-    private List<Trailer> trailers = new ArrayList<>();
-
-    private List<Review> reviews = new ArrayList<>();
-
     public Movie(Integer id, String posterPath, String originalTitle, String overview, String releaseDate, Double voteAverage, boolean favorite) {
         this.id = id;
         this.posterPath = posterPath;
@@ -64,82 +54,28 @@ public class Movie implements Parcelable {
         this.favorite = favorite;
     }
 
-    private Movie(Parcel in) {
-        readFromParcel(in);
-    }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Movie createFromParcel(Parcel in ) {
-            return new Movie(in);
-        }
-
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(posterPath);
-        parcel.writeString(originalTitle);
-        parcel.writeString(overview);
-        parcel.writeString(releaseDate);
-        parcel.writeDouble(voteAverage);
-        parcel.writeByte((byte) (favorite ? 1 : 0));
-    }
-
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getPosterPath() {
         return posterPath;
     }
 
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
     public String getOriginalTitle() {
         return originalTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
     }
 
     public String getOverview() {
         return overview;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
     public Double getVoteAverage() {
         return voteAverage;
-    }
-
-    public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
     }
 
     public boolean isFavorite() {
@@ -148,31 +84,5 @@ public class Movie implements Parcelable {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
-    }
-
-    public List<Trailer> getTrailers() {
-        return trailers;
-    }
-
-    public void setTrailers(List<Trailer> trailers) {
-        this.trailers = trailers;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    private void readFromParcel(Parcel in ) {
-        id = in.readInt();
-        posterPath = in.readString();
-        originalTitle = in.readString();
-        overview = in.readString();
-        releaseDate = in.readString();
-        voteAverage = in.readDouble();
-        favorite = in.readByte() != 0;
     }
 }
