@@ -24,6 +24,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,8 +54,6 @@ public class DetailActivity extends AppCompatActivity implements
 
     @BindView(R.id.poster_small_iv)
     ImageView mPosterIv;
-    @BindView(R.id.original_title_tv)
-    TextView mOriginalTitle;
     @BindView(R.id.overview_tv)
     TextView mOverview;
     @BindView(R.id.release_date_tv)
@@ -68,6 +67,10 @@ public class DetailActivity extends AppCompatActivity implements
     RecyclerView mTrailersRecyclerView;
     @BindView(R.id.reviews_recycle_view)
     RecyclerView mReviewsRecyclerView;
+    @BindView(R.id.main_poster)
+    ImageView mMainPoster;
+    @BindView(R.id.main_toolbar)
+    Toolbar mToolbar;
     @BindView(R.id.favorite_button)
     FloatingActionButton mFavoriteButton;
 
@@ -102,6 +105,8 @@ public class DetailActivity extends AppCompatActivity implements
         mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mReviewAdapter = new ReviewAdapter();
         mReviewsRecyclerView.setAdapter(mReviewAdapter);
+
+        mReviewsRecyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -143,16 +148,18 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     private void init(Movie movie) {
-        mOriginalTitle.setText(movie.getOriginalTitle());
+        mToolbar.setTitle(movie.getOriginalTitle());
         mOverview.setText(movie.getOverview());
         String year = getReleaseYear(movie.getReleaseDate());
         mReleaseDate.setText(year);
         mVoteAverage.setText(getString(R.string.vote_average, movie.getVoteAverage()));
         mIsFavorite = movie.isFavorite();
 
+        ImageUtils.loadImage(this, movie.getPosterPath(), mMainPoster, 4);
         ImageUtils.loadImage(this, movie.getPosterPath(), mPosterIv, 1);
 
         initFavoriteButton(mIsFavorite);
+        initBackButton();
     }
 
     private void initFavoriteButton(boolean isFavorite) {
@@ -161,6 +168,10 @@ public class DetailActivity extends AppCompatActivity implements
         } else {
             mFavoriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
+    }
+
+    private void initBackButton() {
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private String getReleaseYear(String releaseDate) {

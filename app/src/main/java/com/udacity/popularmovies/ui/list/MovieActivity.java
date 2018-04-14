@@ -23,6 +23,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,6 +56,8 @@ public class MovieActivity extends AppCompatActivity implements
     RecyclerView mRecyclerView;
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
+    @BindView(R.id.main_toolbar)
+    Toolbar mToolbar;
 
     private MovieAdapter mMovieAdapter;
     private MovieActivityViewModel mViewModel;
@@ -73,6 +76,8 @@ public class MovieActivity extends AppCompatActivity implements
 
         mMovieAdapter = new MovieAdapter(getApplicationContext(), this);
         mRecyclerView.setAdapter(mMovieAdapter);
+
+        setSupportActionBar(mToolbar);
 
         initObserver();
 
