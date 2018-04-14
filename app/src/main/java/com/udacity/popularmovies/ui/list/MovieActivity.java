@@ -19,6 +19,7 @@ package com.udacity.popularmovies.ui.list;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,8 @@ public class MovieActivity extends AppCompatActivity implements
 
     @BindView(R.id.movies_recycle_view)
     RecyclerView mRecyclerView;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView mBottomNavigationView;
 
     private MovieAdapter mMovieAdapter;
     private MovieActivityViewModel mViewModel;
@@ -72,6 +75,8 @@ public class MovieActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(mMovieAdapter);
 
         initObserver();
+
+        initNavigationItemSelectedListener();
     }
 
     private void initObserver() {
@@ -87,7 +92,6 @@ public class MovieActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        setSortMenuItem(menu);
         return true;
     }
 
@@ -97,18 +101,6 @@ public class MovieActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.refresh:
                 mViewModel.refreshData();
-                return true;
-            case R.id.sort_by_popular:
-                item.setChecked(true);
-                mViewModel.updateData(APP_PREFERENCE_POPULAR);
-                return true;
-            case R.id.sort_by_top_rated:
-                item.setChecked(true);
-                mViewModel.updateData(APP_PREFERENCE_TOP_RATED);
-                return true;
-            case R.id.sort_by_favorite:
-                item.setChecked(true);
-                mViewModel.updateData(APP_PREFERENCE_FAVORITE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -131,7 +123,30 @@ public class MovieActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
-    private void setSortMenuItem(Menu menu) {
+    private void initNavigationItemSelectedListener() {
+
+        setNavigationMenuItem();
+
+        mBottomNavigationView.setOnNavigationItemSelectedListener(
+                item -> {
+                    switch (item.getItemId()) {
+                        case R.id.sort_by_popular:
+                            mViewModel.updateData(APP_PREFERENCE_POPULAR);
+                            break;
+                        case R.id.sort_by_top_rated:
+                            mViewModel.updateData(APP_PREFERENCE_TOP_RATED);
+                            break;
+                        case R.id.sort_by_favorite:
+                            mViewModel.updateData(APP_PREFERENCE_FAVORITE);
+                            break;
+                    }
+                    return true;
+                });
+    }
+
+    private void setNavigationMenuItem() {
+        Menu menu = mBottomNavigationView.getMenu();
+
         MenuItem popularMenuItem = menu.findItem(R.id.sort_by_popular);
         MenuItem topRatedMenuItem = menu.findItem(R.id.sort_by_top_rated);
         MenuItem favoriteMenuItem = menu.findItem(R.id.sort_by_favorite);
