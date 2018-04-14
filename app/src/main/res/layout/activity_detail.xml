@@ -73,16 +73,6 @@
             app:layout_constraintTop_toBottomOf="@+id/poster_small_iv"
             tools:text="Set in a post-apocalyptic world" />
 
-        <com.github.ivbaranov.mfb.MaterialFavoriteButton
-            android:id="@+id/detail_favorite_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/poster_small_iv"
-            app:mfb_color="white"
-            app:mfb_type="heart" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/trailers_recycle_view"
             android:layout_width="match_parent"
@@ -99,6 +89,19 @@
             android:layout_margin="@dimen/margin_small"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trailers_recycle_view" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/favorite_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="@+id/original_title_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/original_title_tv"
+            app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
 
     </android.support.constraint.ConstraintLayout>

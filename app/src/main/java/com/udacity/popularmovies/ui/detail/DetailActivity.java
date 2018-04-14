@@ -20,13 +20,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.model.Movie;
 import com.udacity.popularmovies.utilities.ImageUtils;
@@ -61,8 +61,6 @@ public class DetailActivity extends AppCompatActivity implements
     TextView mReleaseDate;
     @BindView(R.id.vote_average_tv)
     TextView mVoteAverage;
-    @BindView(R.id.detail_favorite_button)
-    MaterialFavoriteButton mMaterialFavoriteButton;
     @BindString(R.string.detail_error_message)
     String mDetailErrorMessage;
 
@@ -70,6 +68,8 @@ public class DetailActivity extends AppCompatActivity implements
     RecyclerView mTrailersRecyclerView;
     @BindView(R.id.reviews_recycle_view)
     RecyclerView mReviewsRecyclerView;
+    @BindView(R.id.favorite_button)
+    FloatingActionButton mFavoriteButton;
 
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewAdapter;
@@ -110,16 +110,16 @@ public class DetailActivity extends AppCompatActivity implements
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(baseUrl + key)));
     }
 
-    @OnClick(R.id.detail_favorite_button)
-    void onFavoriteButtonClick() {
+    @OnClick(R.id.favorite_button)
+    void onFloatingActionButtonClick() {
         if (mIsFavorite) {
             mViewModel.removeFromFavorite();
             mIsFavorite = false;
-            mMaterialFavoriteButton.setFavorite(false);
+            mFavoriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         } else {
             mViewModel.addToFavorite();
             mIsFavorite = true;
-            mMaterialFavoriteButton.setFavorite(true);
+            mFavoriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
         }
     }
 
@@ -149,9 +149,18 @@ public class DetailActivity extends AppCompatActivity implements
         mReleaseDate.setText(year);
         mVoteAverage.setText(getString(R.string.vote_average, movie.getVoteAverage()));
         mIsFavorite = movie.isFavorite();
-        mMaterialFavoriteButton.setFavorite(mIsFavorite, false);
 
         ImageUtils.loadImage(this, movie.getPosterPath(), mPosterIv, 1);
+
+        initFavoriteButton(mIsFavorite);
+    }
+
+    private void initFavoriteButton(boolean isFavorite) {
+        if (isFavorite) {
+            mFavoriteButton.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            mFavoriteButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
     }
 
     private String getReleaseYear(String releaseDate) {

@@ -20,4 +20,5 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#009688</color>
     <color name="colorFavorite">#ff5983</color>
+    <color name="colorWhite">#ffffff</color>
 </resources>
