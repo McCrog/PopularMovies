@@ -28,6 +28,7 @@ import com.udacity.popularmovies.ui.detail.DetailActivity;
 import java.util.List;
 
 /**
+ * Created by McCrog on 09/04/2018.
  * {@link ViewModel} for {@link DetailActivity}
  */
 public class DetailActivityViewModel extends ViewModel {
@@ -35,9 +36,9 @@ public class DetailActivityViewModel extends ViewModel {
     private final LiveData<Movie> mMovie;
     private final LiveData<List<Trailer>> mTrailer;
     private final LiveData<List<Review>> mReview;
-    private MovieRepository mRepository;
-    private int mId;
-    private int mIndex;
+    private final MovieRepository mRepository;
+    private final int mId;
+    private final int mIndex;
 
     public DetailActivityViewModel(MovieRepository repository, int id, int index) {
         mRepository = repository;

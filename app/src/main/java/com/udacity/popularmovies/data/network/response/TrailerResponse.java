@@ -22,7 +22,7 @@ import com.udacity.popularmovies.model.Trailer;
 import java.util.List;
 
 /**
- * Created by alex on 26/03/2018.
+ * Created by McCrog on 26/03/2018.
  *
  */
 

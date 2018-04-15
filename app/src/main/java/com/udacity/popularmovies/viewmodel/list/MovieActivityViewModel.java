@@ -28,6 +28,7 @@ import com.udacity.popularmovies.ui.list.MovieActivity;
 import java.util.List;
 
 /**
+ * Created by McCrog on 09/04/2018.
  * {@link ViewModel} for {@link MovieActivity}
  */
 public class MovieActivityViewModel extends ViewModel {
@@ -37,7 +38,7 @@ public class MovieActivityViewModel extends ViewModel {
     private final LiveData<List<Movie>> mMovie;
     private final LiveData<List<Movie>> mFavoriteMovies;
 
-    private MovieRepository mRepository;
+    private final MovieRepository mRepository;
 
     public MovieActivityViewModel(MovieRepository repository) {
         mRepository = repository;
@@ -51,9 +52,9 @@ public class MovieActivityViewModel extends ViewModel {
         }
     }
 
-    private Observer<List<Movie>> networkObserver = mMoviesMediatorLiveData::setValue;
+    private final Observer<List<Movie>> networkObserver = mMoviesMediatorLiveData::setValue;
 
-    private Observer<List<Movie>> databaseObserver = mMoviesMediatorLiveData::setValue;
+    private final Observer<List<Movie>> databaseObserver = mMoviesMediatorLiveData::setValue;
 
     public MediatorLiveData<List<Movie>> getMoviesMediatorLiveData() {
         return mMoviesMediatorLiveData;

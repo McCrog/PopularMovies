@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.facebook.stetho.Stetho;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.ui.detail.DetailActivity;
 import com.udacity.popularmovies.utilities.InjectorUtils;
@@ -48,6 +47,7 @@ import static com.udacity.popularmovies.utilities.Constants.MOVIE_INDEX;
 
 /**
  * Created by McCrog on 23/02/2018.
+ *
  */
 
 public class MovieActivity extends AppCompatActivity implements
@@ -67,7 +67,8 @@ public class MovieActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Stetho.initializeWithDefaults(this);
+        // For debug
+        // Stetho.initializeWithDefaults(this);
 
         setContentView(R.layout.activity_main);
 
@@ -106,9 +107,7 @@ public class MovieActivity extends AppCompatActivity implements
         MovieViewModelFactory factory = InjectorUtils.provideMovieActivityViewModelFactory(this.getApplicationContext());
         mViewModel = ViewModelProviders.of(this, factory).get(MovieActivityViewModel.class);
 
-        mViewModel.getMoviesMediatorLiveData().observe(this, movies -> {
-            mMovieAdapter.setData(movies);
-        });
+        mViewModel.getMoviesMediatorLiveData().observe(this, movies -> mMovieAdapter.setData(movies));
     }
 
     @Override

@@ -28,7 +28,8 @@ import com.udacity.popularmovies.model.Trailer;
 import java.util.List;
 
 /**
- * Created by alex on 08/04/2018.
+ * Created by McCrog on 08/04/2018.
+ *
  */
 
 public class MovieRepository {

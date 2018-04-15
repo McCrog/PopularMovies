@@ -45,12 +45,11 @@ import static com.udacity.popularmovies.utilities.Constants.MOVIE_INDEX;
 
 /**
  * Created by McCrog on 25/02/2018.
+ *
  */
 
 public class DetailActivity extends AppCompatActivity implements
         TrailerAdapter.TrailerOnClickHandler {
-
-    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     @BindView(R.id.poster_small_iv)
     ImageView mPosterIv;
@@ -131,20 +130,14 @@ public class DetailActivity extends AppCompatActivity implements
     private void observeMovieData() {
         mViewModel = ViewModelProviders.of(this, mFactory).get(DetailActivityViewModel.class);
 
-        mViewModel.getMovie().observe(this, movie -> {
-            // Update the UI
-            init(movie);
-        });
+        // Update the UI
+        mViewModel.getMovie().observe(this, this::init);
 
-        mViewModel.getTrailers().observe(this, trailers -> {
-            // Update the Adapter
-            mTrailerAdapter.setData(trailers);
-        });
+        // Update the Adapter
+        mViewModel.getTrailers().observe(this, trailers -> mTrailerAdapter.setData(trailers));
 
-        mViewModel.getReviews().observe(this, reviews -> {
-            // Update the Adapter
-            mReviewAdapter.setData(reviews);
-        });
+        // Update the Adapter
+        mViewModel.getReviews().observe(this, reviews -> mReviewAdapter.setData(reviews));
     }
 
     private void init(Movie movie) {

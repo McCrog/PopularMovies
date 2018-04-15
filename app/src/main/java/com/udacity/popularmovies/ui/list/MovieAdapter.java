@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private final List<Movie> mMovies = new ArrayList<>();
+    private final List<Movie> mMovies;
     private final Context mContext;
     private final MovieOnClickHandler mClickHandler;
 
@@ -55,6 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public MovieAdapter(Context context, MovieOnClickHandler clickHandler) {
         this.mContext = context;
         this.mClickHandler = clickHandler;
+        mMovies = new ArrayList<>();
     }
 
     @Override
@@ -74,7 +75,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return (mMovies == null) ? 0 : mMovies.size();
+        return mMovies.size();
     }
 
     public void setData(List<Movie> newMovies) {

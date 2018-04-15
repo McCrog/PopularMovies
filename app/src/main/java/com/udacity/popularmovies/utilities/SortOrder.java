@@ -19,7 +19,8 @@ package com.udacity.popularmovies.utilities;
 import android.support.annotation.StringDef;
 
 /**
- * Created by alex on 07/04/2018.
+ * Created by McCrog on 07/04/2018.
+ *
  */
 
 @StringDef({ SortOrder.POPULAR, SortOrder.TOP_RATED, SortOrder.FAVORITES })

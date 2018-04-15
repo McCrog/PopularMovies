@@ -18,7 +18,6 @@ package com.udacity.popularmovies.data.network;
 
 import android.support.annotation.NonNull;
 
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.udacity.popularmovies.BuildConfig;
 
 import java.io.IOException;
@@ -33,17 +32,18 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by alex on 24/02/2018.
+ * Created by McCrog on 24/02/2018.
+ *
  */
 
-public class NetworkDataService {
+class NetworkDataService {
 
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
 
     private NetworkDataService() {
     }
 
-    public static NetworkDataApi getNetworkService() {
+    static NetworkDataApi getNetworkService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(getOkHttpClient())
@@ -52,11 +52,6 @@ public class NetworkDataService {
                 .build();
         return retrofit.create(NetworkDataApi.class);
     }
-
-    // For Stetho
-    private static OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .addNetworkInterceptor(new StethoInterceptor())
-            .build();
 
     private static OkHttpClient getOkHttpClient() {
         final OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()

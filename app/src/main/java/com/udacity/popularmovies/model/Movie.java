@@ -25,22 +25,22 @@ import com.google.gson.annotations.SerializedName;
 
 public class Movie {
     @SerializedName("id")
-    private Integer id;
+    private final Integer id;
 
     @SerializedName("poster_path")
-    private String posterPath;
+    private final String posterPath;
 
     @SerializedName("original_title")
-    private String originalTitle;
+    private final String originalTitle;
 
     @SerializedName("overview")
-    private String overview;
+    private final String overview;
 
     @SerializedName("release_date")
-    private String releaseDate;
+    private final String releaseDate;
 
     @SerializedName("vote_average")
-    private Double voteAverage;
+    private final Double voteAverage;
 
     private boolean favorite;
 

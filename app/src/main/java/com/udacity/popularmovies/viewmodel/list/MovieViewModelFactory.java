@@ -18,9 +18,14 @@ package com.udacity.popularmovies.viewmodel.list;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
 
 import com.udacity.popularmovies.data.MovieRepository;
 
+/**
+ * Created by McCrog on 09/04/2018.
+ *
+ */
 public class MovieViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final MovieRepository mRepository;
@@ -29,8 +34,9 @@ public class MovieViewModelFactory extends ViewModelProvider.NewInstanceFactory 
         this.mRepository = repository;
     }
 
+    @NonNull
     @Override
-    public <T extends ViewModel> T create(Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
         return (T) new MovieActivityViewModel(mRepository);
     }

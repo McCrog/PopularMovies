@@ -40,13 +40,14 @@ import static com.udacity.popularmovies.utilities.Constants.APP_PREFERENCE_POPUL
 
 /**
  * Created by McCrog on 23/02/2018.
+ *
  */
 
 public class MovieNetworkDataSource {
     private static final String LOG_TAG = MovieNetworkDataSource.class.getSimpleName();
 
     private final MutableLiveData<List<Movie>> mDownloadedMovies;
-    private NetworkDataApi mNetworkDataApi = NetworkDataService.getNetworkService();
+    private final NetworkDataApi mNetworkDataApi = NetworkDataService.getNetworkService();
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
@@ -59,7 +60,7 @@ public class MovieNetworkDataSource {
     private int mCurrentPage = 1;
     private int mTotalPages = 0;
     private boolean mIsLoading = false;
-    private List<Movie> mTempList = new ArrayList<>();
+    private final List<Movie> mTempList = new ArrayList<>();
 
     /**
      * Get the singleton for this class
@@ -110,14 +111,14 @@ public class MovieNetworkDataSource {
 
         trailersCall.enqueue(new Callback<TrailerResponse>() {
             @Override
-            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+            public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     downloadedTrailers.postValue(response.body().getResults());
                 }
             }
 
             @Override
-            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<TrailerResponse> call, @NonNull Throwable t) {
                 Log.e(LOG_TAG, t.toString());
             }
         });
@@ -132,14 +133,14 @@ public class MovieNetworkDataSource {
 
         reviewCall.enqueue(new Callback<ReviewResponse>() {
             @Override
-            public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
+            public void onResponse(@NonNull Call<ReviewResponse> call, @NonNull Response<ReviewResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     downloadedReviews.postValue(response.body().getResults());
                 }
             }
 
             @Override
-            public void onFailure(Call<ReviewResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<ReviewResponse> call, @NonNull Throwable t) {
                 Log.e(LOG_TAG, t.toString());
             }
         });

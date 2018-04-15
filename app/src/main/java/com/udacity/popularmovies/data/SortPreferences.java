@@ -32,7 +32,7 @@ import static com.udacity.popularmovies.utilities.Constants.APP_SORT_PREFERENCE;
 public class SortPreferences {
     private static final String LOG_TAG = SortPreferences.class.getSimpleName();
 
-    private SharedPreferences mSharedPreferences;
+    private final SharedPreferences mSharedPreferences;
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();

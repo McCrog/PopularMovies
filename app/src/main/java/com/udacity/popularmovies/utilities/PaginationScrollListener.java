@@ -20,13 +20,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 /**
- * Created by alex on 15/04/2018.
+ * Created by McCrog on 15/04/2018.
+ *
  */
 
 public abstract class PaginationScrollListener extends RecyclerView.OnScrollListener {
-    private GridLayoutManager mGridLayoutManager;
+    private final GridLayoutManager mGridLayoutManager;
 
-    public PaginationScrollListener(GridLayoutManager gridLayoutManager) {
+    protected PaginationScrollListener(GridLayoutManager gridLayoutManager) {
         mGridLayoutManager = gridLayoutManager;
     }
 

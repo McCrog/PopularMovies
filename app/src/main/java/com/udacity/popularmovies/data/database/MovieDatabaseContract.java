@@ -20,25 +20,26 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * Created by alex on 02/04/2018.
+ * Created by McCrog on 02/04/2018.
+ *
  */
 
-public class MovieDatabaseContract {
-    public static final String AUTHORITY = "com.udacity.popularmovies";
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
-    public static final String PATH_MOVIES = "movies";
+class MovieDatabaseContract {
+    static final String AUTHORITY = "com.udacity.popularmovies";
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    static final String PATH_MOVIES = "movies";
 
-    public static final class MovieEntry implements BaseColumns {
-        public static final Uri CONTENT_URI =
+    static final class MovieEntry implements BaseColumns {
+        static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
 
-        public static final String TABLE_NAME = "movie";
-        public static final String COLUMN_MOVIE_ID = "movieId";
-        public static final String COLUMN_POSTER_PATH = "posterPath";
-        public static final String COLUMN_ORIGINAL_TITLE = "originalTitle";
-        public static final String COLUMN_OVERVIEW = "overview";
-        public static final String COLUMN_RELEASE_DATE = "releaseDate";
-        public static final String COLUMN_VOTE_AVERAGE = "voteAverage";
-        public static final String COLUMN_FAVORITE = "favorite";
+        static final String TABLE_NAME = "movie";
+        static final String COLUMN_MOVIE_ID = "movieId";
+        static final String COLUMN_POSTER_PATH = "posterPath";
+        static final String COLUMN_ORIGINAL_TITLE = "originalTitle";
+        static final String COLUMN_OVERVIEW = "overview";
+        static final String COLUMN_RELEASE_DATE = "releaseDate";
+        static final String COLUMN_VOTE_AVERAGE = "voteAverage";
+        static final String COLUMN_FAVORITE = "favorite";
     }
 }

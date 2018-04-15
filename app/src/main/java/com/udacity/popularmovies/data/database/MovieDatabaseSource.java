@@ -30,7 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by alex on 02/04/2018.
+ * Created by McCrog on 02/04/2018.
+ *
  */
 
 public class MovieDatabaseSource {

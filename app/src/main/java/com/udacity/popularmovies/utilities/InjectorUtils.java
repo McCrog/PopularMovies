@@ -26,11 +26,12 @@ import com.udacity.popularmovies.viewmodel.detail.DetailViewModelFactory;
 import com.udacity.popularmovies.viewmodel.list.MovieViewModelFactory;
 
 /**
- * Created by alex on 09/04/2018.
+ * Created by McCrog on 09/04/2018.
+ *
  */
 
 public class InjectorUtils {
-    public static MovieRepository provideRepository(Context context) {
+    private static MovieRepository provideRepository(Context context) {
         MovieDatabaseSource database = MovieDatabaseSource.getInstance(context.getApplicationContext());
         MovieNetworkDataSource networkDataSource =
                 MovieNetworkDataSource.getInstance();

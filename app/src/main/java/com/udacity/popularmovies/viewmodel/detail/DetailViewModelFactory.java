@@ -18,19 +18,21 @@ package com.udacity.popularmovies.viewmodel.detail;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
 
 import com.udacity.popularmovies.data.MovieRepository;
 import com.udacity.popularmovies.model.Movie;
 
 /**
+ * Created by McCrog on 09/04/2018.
  * Factory method that allows us to create a ViewModel with a constructor that takes a
  * {@link MovieRepository} and an ID for the current {@link Movie}
  */
 public class DetailViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final MovieRepository mRepository;
-    private int mId;
-    private int mIndex;
+    private final int mId;
+    private final int mIndex;
 
     public DetailViewModelFactory(MovieRepository repository, int id, int index) {
         mRepository = repository;
@@ -38,8 +40,9 @@ public class DetailViewModelFactory extends ViewModelProvider.NewInstanceFactory
         mIndex = index;
     }
 
+    @NonNull
     @Override
-    public <T extends ViewModel> T create(Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
         return (T) new DetailActivityViewModel(mRepository, mId, mIndex);
     }
