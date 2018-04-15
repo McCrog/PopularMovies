@@ -27,8 +27,20 @@ import java.util.List;
  */
 
 public class MovieResponse {
+    @SerializedName("page")
+    private Integer page;
+    @SerializedName("total_pages")
+    private Integer totalPages;
     @SerializedName("results")
     private List<Movie> results;
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public Integer getTotalPages() {
+        return totalPages;
+    }
 
     public List<Movie> getResults() {
         return results;

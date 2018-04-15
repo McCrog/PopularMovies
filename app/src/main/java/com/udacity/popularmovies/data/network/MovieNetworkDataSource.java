@@ -29,6 +29,7 @@ import com.udacity.popularmovies.model.Review;
 import com.udacity.popularmovies.model.Trailer;
 import com.udacity.popularmovies.utilities.SortOrder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -55,6 +56,11 @@ public class MovieNetworkDataSource {
         mDownloadedMovies = new MutableLiveData<>();
     }
 
+    private int mCurrentPage = 1;
+    private int mTotalPages = 0;
+    private boolean mIsLoading = false;
+    private List<Movie> mTempList = new ArrayList<>();
+
     /**
      * Get the singleton for this class
      */
@@ -72,16 +78,20 @@ public class MovieNetworkDataSource {
     public void fetchMovies(int sortPreference) {
         Call<MovieResponse> popularMovies;
         if (sortPreference == APP_PREFERENCE_POPULAR) {
-            popularMovies = mNetworkDataApi.getMovies(SortOrder.POPULAR);
+            popularMovies = mNetworkDataApi.getMovies(SortOrder.POPULAR, mCurrentPage);
         } else {
-            popularMovies = mNetworkDataApi.getMovies(SortOrder.TOP_RATED);
+            popularMovies = mNetworkDataApi.getMovies(SortOrder.TOP_RATED, mCurrentPage);
         }
 
         popularMovies.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    mDownloadedMovies.setValue(response.body().getResults());
+                    mTempList.addAll(response.body().getResults());
+                    mDownloadedMovies.postValue(mTempList);
+                    mCurrentPage = response.body().getPage();
+                    mTotalPages = response.body().getTotalPages();
+                    mIsLoading = false;
                 }
             }
 
@@ -102,7 +112,7 @@ public class MovieNetworkDataSource {
             @Override
             public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    downloadedTrailers.setValue(response.body().getResults());
+                    downloadedTrailers.postValue(response.body().getResults());
                 }
             }
 
@@ -124,7 +134,7 @@ public class MovieNetworkDataSource {
             @Override
             public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    downloadedReviews.setValue(response.body().getResults());
+                    downloadedReviews.postValue(response.body().getResults());
                 }
             }
 
@@ -145,5 +155,24 @@ public class MovieNetworkDataSource {
         MutableLiveData<Movie> movie = new MutableLiveData<>();
         movie.setValue(mDownloadedMovies.getValue().get(index));
         return movie;
+    }
+
+    public void fetchNewMovies(int sortPreference) {
+        if (mCurrentPage != mTotalPages) {
+            mCurrentPage++;
+            mIsLoading = true;
+            fetchMovies(sortPreference);
+        }
+    }
+
+    public boolean isLoading() {
+        return mIsLoading;
+    }
+
+    public void clearNetworkDataState() {
+        mCurrentPage = 1;
+        mTotalPages = 0;
+        mTempList.clear();
+        mIsLoading = false;
     }
 }

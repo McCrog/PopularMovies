@@ -24,6 +24,7 @@ import com.udacity.popularmovies.utilities.SortOrder;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by alex on 23/02/2018.
@@ -32,7 +33,7 @@ import retrofit2.http.Path;
 
 public interface NetworkDataApi {
     @GET("movie/{sort_order}")
-    Call<MovieResponse> getMovies(@Path("sort_order") @SortOrder String sortOrder);
+    Call<MovieResponse> getMovies(@Path("sort_order") @SortOrder String sortOrder, @Query("page") int pageId);
 
     @GET("movie/{id}/videos")
     Call<TrailerResponse> getMovieTrailers(@Path("id") int id);

@@ -83,6 +83,14 @@ public class MovieActivityViewModel extends ViewModel {
         mRepository.refreshData();
     }
 
+    public void getNewData() {
+        mRepository.getNewNetworkData();
+    }
+
+    public boolean isLoading() {
+        return mRepository.isNetworkDataLoading();
+    }
+
     public int getSortPreference() {
         return mRepository.currentSortPreference();
     }

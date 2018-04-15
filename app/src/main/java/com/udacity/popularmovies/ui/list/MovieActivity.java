@@ -33,6 +33,7 @@ import com.facebook.stetho.Stetho;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.ui.detail.DetailActivity;
 import com.udacity.popularmovies.utilities.InjectorUtils;
+import com.udacity.popularmovies.utilities.PaginationScrollListener;
 import com.udacity.popularmovies.viewmodel.list.MovieActivityViewModel;
 import com.udacity.popularmovies.viewmodel.list.MovieViewModelFactory;
 
@@ -72,7 +73,8 @@ public class MovieActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
 
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns()));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, numberOfColumns());
+        mRecyclerView.setLayoutManager(gridLayoutManager);
 
         mMovieAdapter = new MovieAdapter(getApplicationContext(), this);
         mRecyclerView.setAdapter(mMovieAdapter);
@@ -82,6 +84,22 @@ public class MovieActivity extends AppCompatActivity implements
         initObserver();
 
         initNavigationItemSelectedListener();
+
+        onScrollListener(gridLayoutManager);
+    }
+
+    private void onScrollListener(GridLayoutManager gridLayoutManager) {
+        mRecyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                mViewModel.getNewData();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return mViewModel.isLoading();
+            }
+        });
     }
 
     private void initObserver() {

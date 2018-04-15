@@ -115,6 +115,9 @@ public class MovieRepository {
     public void updateData(int preference) {
         mInitialized = false;
         mSortPreferences.saveSortPreference(preference);
+        if (currentSortPreference() <= 1) {
+            mMovieNetworkDataSource.clearNetworkDataState();
+        }
         initializeData();
     }
 
@@ -123,8 +126,16 @@ public class MovieRepository {
         initializeData();
     }
 
+    public void getNewNetworkData() {
+        mMovieNetworkDataSource.fetchNewMovies(currentSortPreference());
+    }
+
     public int currentSortPreference() {
         return mSortPreferences.getSortPreference();
+    }
+
+    public boolean isNetworkDataLoading() {
+        return mMovieNetworkDataSource.isLoading();
     }
 
     private void startFetchMoviesFromNetwork() {
@@ -135,7 +146,7 @@ public class MovieRepository {
         mMovieDatabaseSource.loadMovies();
     }
 
-    private void deleteOldData() {
+    private void deleteOldDatabaseData() {
         mMovieDatabaseSource.deleteMovies();
     }
 }
