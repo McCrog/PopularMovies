@@ -27,4 +27,5 @@
         android:drawablePadding="8sp"
         android:drawableStart="@drawable/yt_icon_rgb"
         android:gravity="start|center_vertical" />
+
 </LinearLayout>

@@ -71,8 +71,8 @@
                 android:id="@+id/poster_small_iv"
                 android:layout_width="@dimen/detail_poster_w154_width"
                 android:layout_height="@dimen/detail_poster_w154_height"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_24dp"
+                android:layout_marginTop="@dimen/margin_8dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/poster"
                 app:layout_constraintStart_toStartOf="parent"
@@ -82,17 +82,18 @@
             <TextView
                 android:id="@+id/release_date_tv"
                 style="@style/ReleaseDateLabel"
-                android:layout_marginStart="@dimen/margin_extra_large"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_40dp"
+                android:layout_marginTop="@dimen/margin_8dp"
                 app:layout_constraintStart_toEndOf="@+id/poster_small_iv"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="2015" />
 
             <TextView
                 android:id="@+id/vote_average_tv"
+                style="@android:style/TextAppearance.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_8dp"
                 app:layout_constraintStart_toStartOf="@+id/release_date_tv"
                 app:layout_constraintTop_toBottomOf="@+id/release_date_tv"
                 tools:text="7.5/10" />
@@ -102,9 +103,9 @@
                 style="@android:style/TextAppearance.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginEnd="@dimen/margin_16dp"
+                android:layout_marginStart="@dimen/margin_16dp"
+                android:layout_marginTop="@dimen/margin_24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/poster_small_iv"
                 tools:text="Set in a post-apocalyptic world" />
@@ -113,7 +114,7 @@
                 android:id="@+id/trailers_recycle_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
+                android:layout_margin="@dimen/margin_8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/overview_tv" />
@@ -122,7 +123,7 @@
                 android:id="@+id/reviews_recycle_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
+                android:layout_margin="@dimen/margin_8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/trailers_recycle_view" />
 
@@ -130,8 +131,8 @@
                 android:id="@+id/favorite_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/margin_24dp"
+                android:layout_marginTop="@dimen/margin_8dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:backgroundTint="@color/colorWhite"

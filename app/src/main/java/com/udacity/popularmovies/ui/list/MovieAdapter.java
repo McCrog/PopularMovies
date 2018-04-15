@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.model.Movie;
@@ -58,7 +59,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_image_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_card, parent, false);
         return new MovieViewHolder(v);
     }
 
@@ -67,6 +68,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie movie = mMovies.get(position);
 
         ImageUtils.loadImage(mContext, movie.getPosterPath(), holder.poster, 2);
+        holder.mOriginalTitle.setText(movie.getOriginalTitle());
+        holder.mVoteAverage.setText(mContext.getString(R.string.vote_average, movie.getVoteAverage()));
     }
 
     @Override
@@ -80,10 +83,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         notifyDataSetChanged();
     }
 
-
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.poster_iv)
+        @BindView(R.id.card_view_poster_iv)
         ImageView poster;
+        @BindView(R.id.card_view_original_title_tv)
+        TextView mOriginalTitle;
+        @BindView(R.id.card_view_vote_average_tv)
+        TextView mVoteAverage;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
@@ -98,5 +104,4 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             mClickHandler.onClick(adapterPosition);
         }
     }
-
 }

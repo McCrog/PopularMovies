@@ -18,9 +18,11 @@
 <resources>
     <dimen name="detail_poster_w154_width">154px</dimen>
     <dimen name="detail_poster_w154_height">231px</dimen>
-    <dimen name="margin_small">8dp</dimen>
-    <dimen name="margin_medium">16dp</dimen>
-    <dimen name="margin_large">24dp</dimen>
-    <dimen name="margin_extra_large">40dp</dimen>
+    <dimen name="margin_2dp">2dp</dimen>
+    <dimen name="margin_4dp">4dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_40dp">40dp</dimen>
     <dimen name="detail_app_bar_height">300dp</dimen>
 </resources>
