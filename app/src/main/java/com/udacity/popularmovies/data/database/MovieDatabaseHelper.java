@@ -33,6 +33,18 @@ class MovieDatabaseHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version
     private static final int DATABASE_VERSION = 1;
 
+    private static final String SQL_CREATE_MOVIE_LIST_TABLE =
+            "CREATE TABLE " + MovieEntry.TABLE_NAME + " (" +
+                    MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
+                    MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
+                    MovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
+                    MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                    MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
+                    MovieEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL, " +
+                    MovieEntry.COLUMN_FAVORITE + " INTEGER NOT NULL CHECK (" + MovieEntry.COLUMN_FAVORITE + " IN (0,1))" +
+                    "); ";
+
     // Constructor
     MovieDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,18 +52,6 @@ class MovieDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String SQL_CREATE_MOVIE_LIST_TABLE =
-                "CREATE TABLE " + MovieEntry.TABLE_NAME + " (" +
-                MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL, " +
-                MovieEntry.COLUMN_FAVORITE + " INTEGER NOT NULL CHECK (" + MovieEntry.COLUMN_FAVORITE + " IN (0,1))" +
-                "); ";
-
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_LIST_TABLE);
     }
 

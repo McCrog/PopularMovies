@@ -89,27 +89,6 @@ public class MovieActivity extends AppCompatActivity implements
         onScrollListener(gridLayoutManager);
     }
 
-    private void onScrollListener(GridLayoutManager gridLayoutManager) {
-        mRecyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
-            @Override
-            protected void loadMoreItems() {
-                mViewModel.getNewData();
-            }
-
-            @Override
-            public boolean isLoading() {
-                return mViewModel.isLoading();
-            }
-        });
-    }
-
-    private void initObserver() {
-        MovieViewModelFactory factory = InjectorUtils.provideMovieActivityViewModelFactory(this.getApplicationContext());
-        mViewModel = ViewModelProviders.of(this, factory).get(MovieActivityViewModel.class);
-
-        mViewModel.getMoviesMediatorLiveData().observe(this, movies -> mMovieAdapter.setData(movies));
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -143,6 +122,27 @@ public class MovieActivity extends AppCompatActivity implements
 
         intent.putExtra(MOVIE_INDEX, index);
         startActivity(intent);
+    }
+
+    private void onScrollListener(GridLayoutManager gridLayoutManager) {
+        mRecyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                mViewModel.getNewData();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return mViewModel.isLoading();
+            }
+        });
+    }
+
+    private void initObserver() {
+        MovieViewModelFactory factory = InjectorUtils.provideMovieActivityViewModelFactory(this.getApplicationContext());
+        mViewModel = ViewModelProviders.of(this, factory).get(MovieActivityViewModel.class);
+
+        mViewModel.getMoviesMediatorLiveData().observe(this, movies -> mMovieAdapter.setData(movies));
     }
 
     private void initNavigationItemSelectedListener() {

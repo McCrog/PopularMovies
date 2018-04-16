@@ -21,7 +21,9 @@ package com.udacity.popularmovies.utilities;
  *
  */
 
-public class Constants {
+public final class Constants {
+    private Constants() {}
+
     public static final String APP_PREFERENCES = "APP_PREFERENCES";
     public static final String APP_SORT_PREFERENCE = "SORT_PREFERENCE";
     public static final int APP_PREFERENCE_POPULAR = 0;
